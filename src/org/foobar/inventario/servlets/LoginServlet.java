@@ -1,6 +1,5 @@
 package org.foobar.inventario.servlets;
 
-import java.math.BigDecimal;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +9,6 @@ import org.foobar.inventario.data.Resultado;
 import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.Usuario;
 
-import com.google.gson.Gson;
 
 /**
  * Servlet implementation class LoginServlet
