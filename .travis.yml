@@ -18,4 +18,5 @@ notifications:
 #Documentación de cómo incluir un JAR customizado, dentro del repositorio local de maven: http://www.mkyong.com/maven/how-to-include-library-manully-into-maven-local-repository/
 before_install:
   - wget https://github.com/cecylopez/inventario/releases/download/release/inventario-1.0.0-RELEASE.jar
-  - mvn install:install-file -Dfile=$PWD/inventario-1.0.0-RELEASE.jar -DgroupId=foobar -DartifactId=inventario -Dversion=1.0.0-RELEASE -Dpackaging=jar
+  -	wget https://github.com/cecylopez/inventario/releases/download/release/pom-1.0.0-RELEASE.xml
+  - mvn install:install-file -Dfile=$PWD/inventario-1.0.0-RELEASE.jar -DgroupId=foobar -DartifactId=inventario -Dversion=1.0.0-RELEASE -Dpackaging=jar -Dpomfile=$PWD/pom-1.0.0-RELEASE.xml
