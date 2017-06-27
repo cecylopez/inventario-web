@@ -19,4 +19,4 @@ notifications:
 before_install:
   - wget https://github.com/cecylopez/inventario/releases/download/release/inventario-1.0.0-RELEASE.jar
   -	wget https://github.com/cecylopez/inventario/releases/download/release/pom-1.0.0-RELEASE.xml
-  - mvn install:install-file -Dfile=$PWD/inventario-1.0.0-RELEASE.jar -DgroupId=foobar -DartifactId=inventario -Dversion=1.0.0-RELEASE -Dpackaging=jar -Dpomfile=$PWD/pom-1.0.0-RELEASE.xml
+  - mvn install:install-file -Dfile=$PWD/inventario-1.0.0-RELEASE.jar -DgroupId=foobar -DartifactId=inventario -Dversion=1.0.0-RELEASE -Dpackaging=jar -DpomFile=$PWD/pom-1.0.0-RELEASE.xml
