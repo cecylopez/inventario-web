@@ -12,6 +12,7 @@ public class Resultado {
 	private JsonObject contenido;
 	private Gson g;
 	public static final Resultado OK= new Resultado(0,"OK");
+	public static final Resultado INVALID_OPT= new Resultado(99, "Opcion invalida");
 	
 	public Resultado(int codigo, String razon){
 		this.codigo = codigo;
