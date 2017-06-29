@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -18,10 +17,12 @@ import org.inventario.data.entities.Usuario;
 /**
  * Servlet implementation class LoginServlet
  */
+//Anotacion funciona en vez del web.xml usando una version de servlet 3.0 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Logger logger=Logger.getLogger(this.getClass());
+	public static final String USUARIO_SESION= "usuario";
 	
 	public void init(){
 		BasicConfigurator.configure();
@@ -47,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 		if (user != null) {
 			user.setClave("");
 			r = new Resultado(0, "OK", user, "usuario");
-			req.getSession(true).setAttribute("usuario", user);
+			req.getSession(true).setAttribute(USUARIO_SESION, user);
 		} else {
 			r = new Resultado(100, "Usuario o clave invalidos");
 
@@ -58,7 +59,7 @@ public class LoginServlet extends HttpServlet {
 
 	public Resultado logOut(HttpServletRequest req, HttpServletResponse resp) {
 		if (req.getSession() != null) {
-			req.getSession().removeAttribute("usuario");
+			req.getSession().removeAttribute(USUARIO_SESION);
 			req.getSession().invalidate();
 		}
 		return Resultado.OK;

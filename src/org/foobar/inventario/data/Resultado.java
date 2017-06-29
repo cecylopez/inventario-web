@@ -1,5 +1,7 @@
 package org.foobar.inventario.data;
 
+import org.inventario.data.JsonEnabled;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -20,9 +22,9 @@ public class Resultado {
 		this.contenido = new JsonObject();
 		this.g= new Gson();
 	}	
-	public Resultado(int codigo, String razon, Object objeto, String nombreObjeto){
+	public Resultado(int codigo, String razon, JsonEnabled objeto, String nombreObjeto){
 		this(codigo,razon);
-		this.contenido.add(nombreObjeto, this.g.toJsonTree(objeto));
+		this.contenido.add(nombreObjeto, objeto.toJson());
 	}
 	
 	public JsonObject toJson(){
