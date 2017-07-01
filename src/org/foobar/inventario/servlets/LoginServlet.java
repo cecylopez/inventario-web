@@ -36,6 +36,8 @@ public class LoginServlet extends HttpServlet {
 			result= logIn(req, resp);
 		}else if ("logOut".equals(opt)) {
 			result=logOut(req, resp);
+		}else if ("getUser".equals(opt)){
+			result=getUser(req, resp);
 		}
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
@@ -64,6 +66,16 @@ public class LoginServlet extends HttpServlet {
 			req.getSession().invalidate();
 		}
 		return Resultado.OK;
+	}
+	
+	public Resultado getUser(HttpServletRequest req, HttpServletResponse resp){
+		Resultado rest= new Resultado(101,"Usuario no en sesion");
+		if(req.getSession()!=null && req.getSession().getAttribute(USUARIO_SESION) !=null && req.getSession().getAttribute(USUARIO_SESION) instanceof Usuario){
+			rest.setCodigo(0);
+			rest.setRazon("OK");
+			rest.setContenido(((Usuario)req.getSession().getAttribute(USUARIO_SESION)).toJson());
+		}
+		return rest;
 	}
 
 }

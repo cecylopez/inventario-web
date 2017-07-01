@@ -3,8 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>Pagina principal</title>
+<link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link href="css/estilos.css" rel="stylesheet">
+<script type="text/javascript"
+	src="../js/angularjs/angular-1.6.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/loginController.js"></script>
 </head>
-<body>
-<h2> Pagina principal</h2>
+<body ng-app="app">
+<div ng-controller="loginController" ng-init="getUser()">
+	<nav class="navbar navbar-default" >
+		<div class="container-fluid">
+			<div class="navbar-header"></div>
+			<p class="navbar-text navbar-left">
+				 <a href="#" class="navbar-link">{{usr.nombre}}</a>
+			</p>
+		</div>
+	</nav>
+	<div class="alert alert-danger" role="alert" ng-show="error.visible">
+		<span class="sr-only">{{error.titulo}}</span> {{error.mensaje}}
+	</div>
+	</div>
 </body>
 </html>
