@@ -16,11 +16,27 @@ app.controller('loginController', function loginController($scope, $http){
 				$scope.usr.id=response.data.contenido.id;
 				$scope.usr.nombre=response.data.contenido.nombre;
 				
+			}else if(response.data.codigo===101){
+					window.location.href='inventario-web/login.html'
 			}else{
-				$scope.error={titulo:'Error', mensaje:response.data.razon, visible:true};
+					$scope.error={titulo:'Error', mensaje:response.data.razon, visible:true};
 			}
-		},function(){});
+		},
+		function(){});
 	};
+	$scope.logOut=function(){
+		$http({
+			method:'POST',
+			url: '/inventario-web/LoginServlet',
+		    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"logOut"}),
+			responseType:"json"
+		}).then(function(response){
+			window.location.href='inventario-web/login.html';
+		}, function(){
+			
+		});
+	}
 	$scope.login=function(){
 		$scope.loading=true;
 		$http({
