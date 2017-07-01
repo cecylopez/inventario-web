@@ -38,6 +38,7 @@ public class LoginServlet extends HttpServlet {
 			result=logOut(req, resp);
 		}
 		resp.setContentType("application/json");
+		resp.setCharacterEncoding("UTF-8");
 		resp.getWriter().write(result.toJson().toString());
 	}
 

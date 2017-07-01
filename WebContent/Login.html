@@ -17,7 +17,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h2 class="text-center">Login</h2>
+					<h2 class="text-center">Login <img src="img/2.gif" height="25" ng-show="loading"></h2>
 				</div>
 				<div class="modal-body">
 					<form class="form col-md-12 center-block" ng-submit="login()">
@@ -29,14 +29,14 @@
 						</div>
 						<div class="form-group">
 							<input class="form-control input-lg" placeholder="Usuario"
-								type="text" id="txtUsuario" ng-model="usr.nombre" required="required">
+								type="text" id="txtUsuario" ng-model="usr.nombre" required="required" ng-disabled="loading">
 						</div>
 						<div class="form-group">
 							<input class="form-control input-lg" placeholder="Contraseña"
-								type="password" id="txtClave" ng-model="usr.clave" required="required">
+								type="password" id="txtClave" ng-model="usr.clave" required="required" ng-disabled="loading">
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary btn-lg btn-block" id="btnLogin"
+							<button type="submit" class="btn btn-primary btn-lg btn-block" id="btnLogin" ng-disabled="loading"
 								>Ingresar</button>
 						</div>
 					</form>
