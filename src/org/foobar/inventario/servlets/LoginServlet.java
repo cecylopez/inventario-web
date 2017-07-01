@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.Usuario;
+import org.inventario.util.SecurityHelper;
 
 /**
  * Servlet implementation class LoginServlet
@@ -38,6 +39,8 @@ public class LoginServlet extends HttpServlet {
 			result=logOut(req, resp);
 		}else if ("getUser".equals(opt)){
 			result=getUser(req, resp);
+		}else if("cambiarClave".equals(opt)){
+			result=cambiarClave(req, resp);
 		}
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
@@ -54,8 +57,8 @@ public class LoginServlet extends HttpServlet {
 			req.getSession(true).setAttribute(USUARIO_SESION, user);
 		} else {
 			r = new Resultado(100, "Usuario o clave invalidos");
-
 		}
+		repo.close();
 
 		return r;
 	}
@@ -69,11 +72,31 @@ public class LoginServlet extends HttpServlet {
 	}
 	
 	public Resultado getUser(HttpServletRequest req, HttpServletResponse resp){
-		Resultado rest= new Resultado(101,"Usuario no en sesion");
+		Resultado rest= Resultado.INVALID_USR;
 		if(req.getSession()!=null && req.getSession().getAttribute(USUARIO_SESION) !=null && req.getSession().getAttribute(USUARIO_SESION) instanceof Usuario){
 			rest.setCodigo(0);
 			rest.setRazon("OK");
 			rest.setContenido(((Usuario)req.getSession().getAttribute(USUARIO_SESION)).toJson());
+		}
+		return rest;
+	}
+	
+	public Resultado cambiarClave(HttpServletRequest req, HttpServletResponse resp){
+		Resultado rest=Resultado.OK;
+		if(req.getSession()!=null && req.getSession().getAttribute(USUARIO_SESION) !=null && req.getSession().getAttribute(USUARIO_SESION) instanceof Usuario){
+			String nuevaClave=req.getParameter("nuevaClave");
+			String repetirNuevaClave=req.getParameter("repetirNuevaClave");
+			if(nuevaClave.equals(repetirNuevaClave)){
+				Usuario	usr=(Usuario)req.getSession().getAttribute(USUARIO_SESION);
+				usr.setClave(SecurityHelper.encriptar(nuevaClave));
+				UsersRepository repo= new UsersRepository();
+				repo.update(usr);
+				repo.close();
+			}else{
+				rest=new Resultado(102,"La clave no coincide");
+			}
+		}else{
+			rest=Resultado.INVALID_USR;
 		}
 		return rest;
 	}
