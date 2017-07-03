@@ -4,6 +4,22 @@ app.controller('loginController', function loginController($scope, $http){
 	$scope.usr={id:0, nombre:'', clave:''};
 	$scope.error={titulo:'', mensaje:'', visible:false};
 	$scope.loading=false;
+	$scope.cambiarClave=function(){
+		$http({
+			method:'POST',
+			url:'/inventario-web/LoginServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"cambiarClave", claveActual: $scope.claveActual, nuevaClave: $scope.nuevaClave, repetirNuevaClave: $scope.repetirNuevaClave}),
+			responseType:"json"
+		}).then(function(response){
+			if(response.data.codigo===0){
+				window.location.href='/inventario-web/login.html';
+			}else{
+				$scope.error={titulo:'Error', mensaje:response.data.razon, visible:true};
+			}
+		},
+		function(){});
+	};
 	$scope.getUser=function(){
 		$http({
 			method:'POST',
@@ -16,13 +32,17 @@ app.controller('loginController', function loginController($scope, $http){
 				$scope.usr.id=response.data.contenido.id;
 				$scope.usr.nombre=response.data.contenido.nombre;
 				
-			}else if(response.data.codigo===101){
+			}else if(response.data.codigo===0){
 					window.location.href='inventario-web/login.html'
 			}else{
 					$scope.error={titulo:'Error', mensaje:response.data.razon, visible:true};
 			}
+			$scope.loading=false;
 		},
-		function(){});
+		function(){
+			$scope.loading=false;
+
+		});
 	};
 	$scope.logOut=function(){
 		$http({

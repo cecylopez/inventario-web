@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"></link>
+<link href="../css/bootstrap/bootstrap-theme.min.css"></link>
+<script type="text/javascript" src="../js/angularjs/angular-1.6.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/loginController.js"></script>
+
+</head>
+<body ng-app="app">
+<div class="page-header"></div> 
+<div class="panel panel-primary" ng-controller="loginController">
+  <div class="panel-heading">
+    <h3 class="panel-title" align="center">Cambio de contraseña</h3>
+  </div>
+  <div class="alert alert-danger" role="alert" ng-show="error.visible">
+		<span class="sr-only">{{error.titulo}}</span>
+		{{error.mensaje}}
+  </div>
+  <div class="panel-body">
+  <form id="cambioClave" name="cambioClave" class="form group-row" role="form" ng-submit="cambiarClave()" >
+  <div class="form-group row">
+      <label for="txtClaveActual" class="col-sm-2 col-form-label">Clave actual</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="ClaveActual" placeholder="Password" ng-model="claveActual" ng-disabled="loading">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="txtNuevaClave" class="col-sm-2 col-form-label">Nueva clave</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="NuevaClave" placeholder="Password" ng-model="nuevaClave" ng-disabled="loading">
+      </div>
+    </div>
+    
+    <div class="form-group row">
+      <label for="txtRepetirClave" class="col-sm-2 col-form-label">Repetir nueva clave</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="RepetirClave" placeholder="Password" ng-model="repetirNuevaClave" ng-disabled="loading">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" ng-disabled="loading">Cambiar clave</button>
+					
+</form>
+  </div>
+  <div class="panel-footer"> </div>
+</div>
+
+</body>
+</html>

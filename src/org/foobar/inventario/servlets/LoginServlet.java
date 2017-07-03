@@ -84,14 +84,19 @@ public class LoginServlet extends HttpServlet {
 	public Resultado cambiarClave(HttpServletRequest req, HttpServletResponse resp){
 		Resultado rest=Resultado.OK;
 		if(req.getSession()!=null && req.getSession().getAttribute(USUARIO_SESION) !=null && req.getSession().getAttribute(USUARIO_SESION) instanceof Usuario){
-			String nuevaClave=req.getParameter("nuevaClave");
-			String repetirNuevaClave=req.getParameter("repetirNuevaClave");
-			if(nuevaClave.equals(repetirNuevaClave)){
-				Usuario	usr=(Usuario)req.getSession().getAttribute(USUARIO_SESION);
-				usr.setClave(SecurityHelper.encriptar(nuevaClave));
-				UsersRepository repo= new UsersRepository();
-				repo.update(usr);
-				repo.close();
+			String claveActual=req.getParameter("claveActual");
+			Usuario	usr=(Usuario)req.getSession().getAttribute(USUARIO_SESION);
+			UsersRepository repo= new UsersRepository();
+			Usuario usuarioB= repo.get(usr.getId());
+			String claveActualVerificar= usuarioB.getClave();
+			if(SecurityHelper.verificar(claveActual, claveActualVerificar)){
+				String nuevaClave=req.getParameter("nuevaClave");
+				String repetirNuevaClave=req.getParameter("repetirNuevaClave");
+				if(nuevaClave.equals(repetirNuevaClave)){
+					usr.setClave(SecurityHelper.encriptar(nuevaClave));
+					repo.update(usr);
+					repo.close();
+				}	
 			}else{
 				rest=new Resultado(102,"La clave no coincide");
 			}
