@@ -2,9 +2,10 @@ var app = angular.module('app', []);
 
 app.controller('loginController', function loginController($scope, $http){
 	$scope.usr={id:0, nombre:'', clave:''};
-	$scope.error={titulo:'', mensaje:'', visible:false};
+	$scope.mensajer={titulo:'', mensaje:'', visible:false, clase: 'alert alert-danger'};
 	$scope.loading=false;
 	$scope.cambiarClave=function(){
+		$scope.loading = true;
 		$http({
 			method:'POST',
 			url:'/inventario-web/LoginServlet',
@@ -12,13 +13,22 @@ app.controller('loginController', function loginController($scope, $http){
 			data:jQuery.param({opt:"cambiarClave", claveActual: $scope.claveActual, nuevaClave: $scope.nuevaClave, repetirNuevaClave: $scope.repetirNuevaClave}),
 			responseType:"json"
 		}).then(function(response){
+			$scope.loading = false;
 			if(response.data.codigo===0){
-				window.location.href='/inventario-web/login.html';
+				$scope.mensaje={titulo:'OK', mensaje:'Clave actualizada satisfactoriamente', visible:true, clase: 'alert alert-success'};
 			}else{
-				$scope.error={titulo:'Error', mensaje:response.data.razon, visible:true};
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
 			}
+			$scope.claveActual = "";
+			$scope.nuevaClave = "";
+			$scope.repetirNuevaClave = "";
 		},
-		function(){});
+		function(){
+			$scope.loading = false;
+			$scope.claveActual = "";
+			$scope.nuevaClave = "";
+			$scope.repetirNuevaClave = "";
+		});
 	};
 	$scope.getUser=function(){
 		$http({
@@ -35,7 +45,7 @@ app.controller('loginController', function loginController($scope, $http){
 			}else if(response.data.codigo===0){
 					window.location.href='inventario-web/login.html'
 			}else{
-					$scope.error={titulo:'Error', mensaje:response.data.razon, visible:true};
+					$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
 			}
 			$scope.loading=false;
 		},
@@ -69,7 +79,7 @@ app.controller('loginController', function loginController($scope, $http){
 			if(response.data.codigo===0){
 				window.location.href='/inventario-web/site/index.html';
 			}else{
-				$scope.error={titulo:'Error', mensaje:response.data.razon, visible:true};
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
 			}
 			$scope.loading=false;
 		}, function(){
