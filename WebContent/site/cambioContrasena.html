@@ -9,11 +9,12 @@
 <script type="text/javascript"
 	src="../js/angularjs/angular-1.6.4.min.js"></script>
 <script type="text/javascript" src="../js/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/dropdown.js"></script>
 <script type="text/javascript" src="../js/loginController.js"></script>
 
 </head>
 <body ng-app="app">
-	<div class="page-header"></div>
+	<div ng-include="'templates/header.html'"></div>
 	<div class="container" ng-controller="loginController">
 		<div class="col-sm-8 col-sm-offset-2">
 			<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
