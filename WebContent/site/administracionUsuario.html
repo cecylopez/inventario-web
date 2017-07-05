@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Administración de usuarios</title>
+<link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"></link>
+<link href="../css/bootstrap/bootstrap-theme.min.css"></link>
+<link href="../css/estilos.css" rel="stylesheet"></link>
+<script type="text/javascript"
+	src="../js/angularjs/angular-1.6.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/dropdown.js"></script>
+<script type="text/javascript" src="../js/initController.js"></script>
+<script type="text/javascript" src="../js/loginController.js"></script>
+<script type="text/javascript" src="../js/usersController.js"></script>
+</head>
+<body ng-app="app">
+	<div ng-include="'templates/header.html'"></div>
+	<div class="container" ng-controller="usersController" >
+		<div class="col-sm-10 col-sm-offset-1">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title" align="center">Administración de usuarios</h3>
+				</div>
+					<div class="panel-body">
+					<table class="table table-bordered table-hover table-condensed">
+					<thead>
+					<tr>
+					<th>ID</th>
+					<th>Nombre</th>
+					<th>Estado</th>
+					<th>Rol</th>
+					<th>Departamento</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="u in users">
+					<td>{{u.id}}</td>
+					<td>{{u.nombre}}</td>
+					<td>{{u.estado}}</td>
+					<td>{{u.rol}}</td>
+					<td>{{u.departamento}}</td>
+					</tr>
+					</tbody>
+					</table>
+					</div>
+					<div class="panel-footer" id="adminUsuariosPanel">
+					<button type="button" class="btn btn-default" ng-disabled="loading"
+						>Agregar</button>
+					<button type="button" class="btn btn-default" ng-disabled="loading"
+						>Modificar</button>
+					<button type="button" class="btn btn-default" ng-disabled="loading"
+						>Eliminar</button>		
+
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

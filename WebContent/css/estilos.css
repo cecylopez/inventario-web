@@ -12,3 +12,7 @@ div.form-group input.ng-invalid:focus {
 form#cambioClave{
 	padding-top: 20px;
 }
+
+div#adminUsuariosPanel button{
+	margin: 0 5px;
+}

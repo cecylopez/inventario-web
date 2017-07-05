@@ -1,4 +1,3 @@
-var app = angular.module('app', []);
 
 app.controller('loginController', function loginController($scope, $http){
 	$scope.usr={id:0, nombre:'', clave:''};
