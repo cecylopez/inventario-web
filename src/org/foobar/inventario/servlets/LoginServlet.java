@@ -96,9 +96,11 @@ public class LoginServlet extends HttpServlet {
 					usr.setClave(SecurityHelper.encriptar(nuevaClave));
 					repo.update(usr);
 					repo.close();
-				}	
+				}else{
+					rest= new Resultado(103, "La nueva clave no coincide con la repetición");
+				}
 			}else{
-				rest=new Resultado(102,"La clave no coincide");
+				rest=new Resultado(102,"La clave actual no coincide");
 			}
 		}else{
 			rest=Resultado.INVALID_USR;
