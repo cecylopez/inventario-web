@@ -16,3 +16,7 @@ form#cambioClave{
 div#adminUsuariosPanel button{
 	margin: 0 5px;
 }
+
+div#agregarModal input{
+	margin-bottom: 10px;
+}

@@ -11,10 +11,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Estado;
 import org.foobar.inventario.data.Resultado;
+import org.inventario.data.BaseRepository;
 import org.inventario.data.UsersRepository;
+import org.inventario.data.entities.Departamento;
+import org.inventario.data.entities.Rol;
 import org.inventario.data.entities.Usuario;
 
 import com.google.gson.JsonArray;
@@ -33,6 +37,10 @@ public class UsuariosServlet extends HttpServlet {
 		logger.debug("params: " + Arrays.toString(req.getParameterMap().keySet().toArray()));
 		if("getUsers".equals(opt)){
 			result=getUsers(req,resp);
+		}else if ("getRoles".equals(opt)) {
+			result=getRoles(req,resp);
+		}else if ("getDepartamentos".equals(opt)) {
+			result=getDepartamentos(req,resp);
 		}
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
@@ -55,6 +63,37 @@ public class UsuariosServlet extends HttpServlet {
 		jsonUsuarios.add("usuarios", arr);
 		res.setContenido(jsonUsuarios);
 		
+		return res;
+	}
+	
+	public Resultado getRoles(HttpServletRequest req, HttpServletResponse resp){
+		Resultado res=Resultado.OK;
+		List<Rol> roles;
+		JsonObject jsonRoles = new JsonObject();
+		JsonArray arr= new JsonArray();
+		BaseRepository<Rol> brepo= new BaseRepository<>(Rol.class);
+		roles=brepo.getAll();
+		for(Rol rol: roles){
+			arr.add(rol.toJson());
+		}
+		
+		jsonRoles.add("roles",arr );
+		res.setContenido(jsonRoles);
+		return res;
+	}
+	
+	public Resultado getDepartamentos(HttpServletRequest req, HttpServletResponse resp){
+		Resultado res=Resultado.OK;
+		List<Departamento> departamentos;
+		JsonObject jsonDepartamentos= new JsonObject();
+		JsonArray arrDept= new JsonArray();
+		BaseRepository<Departamento> baseRepo= new BaseRepository<>(Departamento.class);
+		departamentos= baseRepo.getAll();
+		for(Departamento dept: departamentos){
+			arrDept.add(dept.toJson());
+		}
+		jsonDepartamentos.add("departamentos", arrDept);
+		res.setContenido(jsonDepartamentos);
 		return res;
 	}
 }
