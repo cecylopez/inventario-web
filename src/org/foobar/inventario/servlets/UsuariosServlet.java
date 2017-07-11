@@ -20,6 +20,7 @@ import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.Departamento;
 import org.inventario.data.entities.Rol;
 import org.inventario.data.entities.Usuario;
+import org.inventario.util.SecurityHelper;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -77,6 +78,7 @@ public class UsuariosServlet extends HttpServlet {
 		JsonArray arr= new JsonArray();
 		BaseRepository<Rol> brepo= new BaseRepository<>(Rol.class);
 		roles=brepo.getAll();
+		req.getSession(true).setAttribute("roles", roles);
 		for(Rol rol: roles){
 			arr.add(rol.toJson());
 		}
@@ -93,11 +95,22 @@ public class UsuariosServlet extends HttpServlet {
 		JsonArray arrDept= new JsonArray();
 		BaseRepository<Departamento> baseRepo= new BaseRepository<>(Departamento.class);
 		departamentos= baseRepo.getAll();
+		req.getSession(true).setAttribute("departamentos", departamentos);
 		for(Departamento dept: departamentos){
 			arrDept.add(dept.toJson());
 		}
 		jsonDepartamentos.add("departamentos", arrDept);
 		res.setContenido(jsonDepartamentos);
+		return res;
+	}
+	public Resultado addUsuario(HttpServletRequest req, HttpServletResponse resp){
+		Resultado res= Resultado.OK;
+		UsersRepository repo= new UsersRepository();
+		Usuario user= new Usuario();
+		List<Rol> roles=(List<Rol>)req.getSession(true).getAttribute("roles");
+		List<Departamento> departamentos=(List<Departamento>)req.getSession().getAttribute("departamentos");
+		user.setNombre(req.getParameter("nombre"));
+		user.setClave(SecurityHelper.encriptar(req.getParameter("clave")));
 		return res;
 	}
 	
