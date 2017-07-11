@@ -55,8 +55,12 @@ public class UsuariosServlet extends HttpServlet {
 		
 		UsersRepository repo= new UsersRepository();
 		users=repo.getAll().stream().filter(u -> !u.getEstado().equals(Estado.ELIMINADO)).collect(Collectors.toList());
-		
 		for (Usuario usr: users) {
+			if(Estado.ACTIVO.equals(usr.getEstado())){
+				usr.setEstado("Activo");
+			}else if (Estado.INACTIVO.equals(usr.getEstado())) {
+				usr.setEstado("Inactivo");
+			}
 			arr.add(usr.toJson());
 		}
 		
@@ -96,4 +100,5 @@ public class UsuariosServlet extends HttpServlet {
 		res.setContenido(jsonDepartamentos);
 		return res;
 	}
+	
 }
