@@ -19,6 +19,9 @@
 	<div ng-include="'templates/header.html'"></div>
 	<div class="container" ng-controller="usersController">
 		<div class="col-sm-10 col-sm-offset-1">
+			<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
+				<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
+			</div>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title" align="center">Administración de
@@ -57,44 +60,60 @@
 			<div class="modal fade" id="agregarModal" tabindex="-1" role="dialog"
 				aria-labelledby="myModalLabel">
 				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h4 class="modal-title" id="myModalLabel">Agregar Usuario</h4>
-						</div>
-						<div class="modal-body">
 
-							<form id="agregarUsuario" name="agregarUsuario" role="form">
+					<form id="agregarUsuario" name="agregarUsuario" role="form"
+						ng-submit="addUsuario()">
+						<div class="modal-content">
+							<div class="modal-header">
+
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel">Agregar Usuario</h4>
+							</div>
+
+							<div class="modal-body">
+								<div ng-class="mensaje.clase" role="alert"
+									ng-show="mensaje.visible">
+									<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
+								</div>
+
+
 								<div class="form-group">
-									<label for="nombreUsr">Nombre</label> <input type="txt"
-										class="form-control" id="nombreUsr" placeholder="Nombre" required="required">
+									<label for="nombreUsr">Nombre</label> <input type="text"
+										class="form-control" id="nombreUsr" placeholder="Nombre"
+										required="required" ng-model="nombre">
 
 								</div>
 								<div class="form-group">
 									<label for="passUser">Clave</label> <input type="password"
-										class="form-control" id="passUsr" placeholder="Password" required="required">
+										class="form-control" id="claveUsr" placeholder="Password"
+										required="required" ng-model="clave">
 
 								</div>
 								<div class="form-group">
-									<label for="rolUsr">Rol</label> <select class="form-control" ng-options="r.nombre for r in roles" ng-model="rol" required="required">	
+									<label for="roldId">Rol</label> <select class="form-control"
+										ng-options="r.nombre for r in roles" ng-model="rol"
+										required="required">
 									</select>
 								</div>
 								<div class="form-group">
 									<label for="departamentoUsr">Departamento</label> <select
-										class="form-control" ng-options ="d.nombre for d in departamentos" ng-model="departamento" required="required">
+										class="form-control"
+										ng-options="d.nombre for d in departamentos"
+										ng-model="departamento" required="required">
 									</select>
 								</div>
-							</form>
+
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal" ng-click="cerrar()">Cerrar</button>
+								<button type="submit" class="btn btn-primary">Guardar</button>
+							</div>
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">Cerrar</button>
-							<button type="button" class="btn btn-primary">Guardar</button>
-						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>

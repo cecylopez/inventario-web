@@ -18,17 +18,17 @@
 	<div ng-include="'templates/header.html'"></div>
 	<div class="container" ng-controller="loginController">
 		<div class="col-sm-8 col-sm-offset-2">
-			<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
+		<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
 				<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
 			</div>
 			<form id="cambioClave" name="cambioClave" class="form group-row"
-						role="form" ng-submit="cambiarClave()">
-			<div class="panel panel-primary" >
-				<div class="panel-heading">
-					<h3 class="panel-title" align="center">Cambio de contraseña</h3>
-				</div>
-				<div class="panel-body">
-					
+				role="form" ng-submit="cambiarClave()">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title" align="center">Cambio de contraseña</h3>
+					</div>
+					<div class="panel-body">
+
 						<div class="form-group">
 
 							<input type="password" class="form-control" id="ClaveActual"
@@ -50,14 +50,14 @@
 						</div>
 
 
-					
-				</div>
-				<div class="panel-footer">
-					<button type="submit" class="btn btn-primary" ng-disabled="loading"
-						>Cambiar clave</button>
 
+					</div>
+					<div class="panel-footer">
+						<button type="submit" class="btn btn-primary"
+							ng-disabled="loading">Cambiar clave</button>
+
+					</div>
 				</div>
-			</div>
 			</form>
 		</div>
 	</div>

@@ -47,6 +47,31 @@ app.controller('usersController', function usersController($scope, $http){
 		},function(){
 		});
 	};
-	
+	$scope.addUsuario=function(){
+		$scope.loading=true;
+		$http({
+			method:'POST',
+			url:'/inventario-web/UsuariosServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"addUsuario", nombre: $scope.nombre, clave: $scope.clave, rol: $scope.rol.id, departamento: $scope.departamento.id}),
+			responseType:"json"
+		}).then(function(response){
+		$scope.loading=false;
+		if(response.data.codigo===0){
+			$scope.mensaje={titulo:'OK', mensaje:'Usuario fue agregado satisfactoriamente', visible:true, clase: 'alert alert-success'};
+			$scope.nombre="";
+			$scope.clave="";
+		}else{
+			$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+		}
+				
+		},function(){
+		});
+	};
+	$scope.cerrar=function(){
+		$scope.nombre="";
+		$scope.clave="";
+	};
 	$scope.getUsers();
 });
+

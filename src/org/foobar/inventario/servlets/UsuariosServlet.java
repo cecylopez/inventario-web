@@ -120,8 +120,8 @@ public class UsuariosServlet extends HttpServlet {
 				user.setId(repo.getMaxId()+1);
 				user.setNombre(req.getParameter("nombre"));
 				user.setClave(SecurityHelper.encriptar(req.getParameter("clave")));
-				user.setRol(roles.stream().filter(r ->r.getId()==Integer.parseInt(req.getParameter("rolId"))).findFirst().get());
-				user.setDepartamento(departamentos.stream().filter(d ->d.getId()==Integer.parseInt(req.getParameter("departamentoId"))).findFirst().get());
+				user.setRol(roles.stream().filter(r ->r.getId()==Integer.parseInt(req.getParameter("rol"))).findFirst().get());
+				user.setDepartamento(departamentos.stream().filter(d ->d.getId()==Integer.parseInt(req.getParameter("departamento"))).findFirst().get());
 				user.setEstado(Estado.ACTIVO);
 				repo.add(user);
 			}
