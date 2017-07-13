@@ -15,6 +15,8 @@ import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.Usuario;
 import org.inventario.util.SecurityHelper;
 
+import com.foobar.inventario.util.ErrorHelper;
+
 /**
  * Servlet implementation class LoginServlet
  */
@@ -30,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-		Resultado result= Resultado.INVALID_OPT;
+		Resultado result= ErrorHelper.getError(99);
 		String opt= req.getParameter("opt");
 		logger.debug("params: " + Arrays.toString(req.getParameterMap().keySet().toArray()));
 		if("logIn".equals(opt)){
@@ -56,7 +58,7 @@ public class LoginServlet extends HttpServlet {
 			r = new Resultado(0, "OK", user, "usuario");
 			req.getSession(true).setAttribute(USUARIO_SESION, user);
 		} else {
-			r = new Resultado(100, "Usuario o clave invalidos");
+			r = ErrorHelper.getError(100);
 		}
 		repo.close();
 
@@ -72,7 +74,7 @@ public class LoginServlet extends HttpServlet {
 	}
 	
 	public Resultado getUser(HttpServletRequest req, HttpServletResponse resp){
-		Resultado rest= Resultado.INVALID_USR;
+		Resultado rest= ErrorHelper.getError(101);
 		if(req.getSession()!=null && req.getSession().getAttribute(USUARIO_SESION) !=null && req.getSession().getAttribute(USUARIO_SESION) instanceof Usuario){
 			rest.setCodigo(0);
 			rest.setRazon("OK");
@@ -97,13 +99,13 @@ public class LoginServlet extends HttpServlet {
 					repo.update(usr);
 					repo.close();
 				}else{
-					rest= new Resultado(103, "La nueva clave no coincide con la repetición");
+					rest= ErrorHelper.getError(103);
 				}
 			}else{
-				rest=new Resultado(102,"La clave actual no coincide");
+				rest=ErrorHelper.getError(102);
 			}
 		}else{
-			rest=Resultado.INVALID_USR;
+			rest=ErrorHelper.getError(101);
 		}
 		return rest;
 	}

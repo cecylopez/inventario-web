@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Estado;
 import org.foobar.inventario.data.Resultado;
@@ -22,6 +21,7 @@ import org.inventario.data.entities.Rol;
 import org.inventario.data.entities.Usuario;
 import org.inventario.util.SecurityHelper;
 
+import com.foobar.inventario.util.ErrorHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -33,7 +33,7 @@ public class UsuariosServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Resultado result= Resultado.INVALID_OPT;
+		Resultado result= ErrorHelper.getError(99);
 		String opt= req.getParameter("opt");
 		logger.debug("params: " + Arrays.toString(req.getParameterMap().keySet().toArray()));
 		if("getUsers".equals(opt)){
@@ -42,6 +42,9 @@ public class UsuariosServlet extends HttpServlet {
 			result=getRoles(req,resp);
 		}else if ("getDepartamentos".equals(opt)) {
 			result=getDepartamentos(req,resp);
+		}else if ("addUsuario".equals(opt)) {
+			result=addUsuario(req, resp);
+			
 		}
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
@@ -107,10 +110,28 @@ public class UsuariosServlet extends HttpServlet {
 		Resultado res= Resultado.OK;
 		UsersRepository repo= new UsersRepository();
 		Usuario user= new Usuario();
-		List<Rol> roles=(List<Rol>)req.getSession(true).getAttribute("roles");
-		List<Departamento> departamentos=(List<Departamento>)req.getSession().getAttribute("departamentos");
-		user.setNombre(req.getParameter("nombre"));
-		user.setClave(SecurityHelper.encriptar(req.getParameter("clave")));
+		try {
+			if(repo.get(req.getParameter("nombre")) !=null){
+				res= ErrorHelper.getError(105);
+				
+			}else {
+				List<Rol> roles=(List<Rol>)req.getSession(true).getAttribute("roles");
+				List<Departamento> departamentos=(List<Departamento>)req.getSession().getAttribute("departamentos");
+				user.setId(repo.getMaxId()+1);
+				user.setNombre(req.getParameter("nombre"));
+				user.setClave(SecurityHelper.encriptar(req.getParameter("clave")));
+				user.setRol(roles.stream().filter(r ->r.getId()==Integer.parseInt(req.getParameter("rolId"))).findFirst().get());
+				user.setDepartamento(departamentos.stream().filter(d ->d.getId()==Integer.parseInt(req.getParameter("departamentoId"))).findFirst().get());
+				user.setEstado(Estado.ACTIVO);
+				repo.add(user);
+			}
+		
+		
+		} catch (Exception e) {
+			logger.error("excepcion tratanto de agregar usuario "+ e.getMessage(), e);
+			 res= ErrorHelper.getError(104); 
+		}
+		
 		return res;
 	}
 	
