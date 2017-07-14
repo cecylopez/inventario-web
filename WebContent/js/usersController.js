@@ -5,6 +5,7 @@ app.controller('usersController', function usersController($scope, $http){
 	$scope.users=[];
 	$scope.roles=[];
 	$scope.departamentos=[];
+	$scope.filtroUsuarios="";
 	
 	$scope.showModal=function(){
 		$scope.roles=[];
