@@ -43,8 +43,9 @@ public class UsuariosServlet extends HttpServlet {
 		}else if ("getDepartamentos".equals(opt)) {
 			result=getDepartamentos(req,resp);
 		}else if ("addUsuario".equals(opt)) {
-			result=addUsuario(req, resp);
-			
+			result=addUsuario(req, resp);	
+		}else if ("deleteUsuario".equals(opt)) {
+			result=deleteUsuario(req,resp);
 		}
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
@@ -70,7 +71,7 @@ public class UsuariosServlet extends HttpServlet {
 		
 		jsonUsuarios.add("usuarios", arr);
 		res.setContenido(jsonUsuarios);
-		
+		repo.close();
 		return res;
 	}
 	
@@ -88,6 +89,7 @@ public class UsuariosServlet extends HttpServlet {
 		
 		jsonRoles.add("roles",arr );
 		res.setContenido(jsonRoles);
+		brepo.close();
 		return res;
 	}
 	
@@ -104,6 +106,7 @@ public class UsuariosServlet extends HttpServlet {
 		}
 		jsonDepartamentos.add("departamentos", arrDept);
 		res.setContenido(jsonDepartamentos);
+		baseRepo.close();
 		return res;
 	}
 	public Resultado addUsuario(HttpServletRequest req, HttpServletResponse resp){
@@ -131,8 +134,21 @@ public class UsuariosServlet extends HttpServlet {
 			logger.error("excepcion tratanto de agregar usuario "+ e.getMessage(), e);
 			 res= ErrorHelper.getError(104); 
 		}
-		
+		repo.close();
 		return res;
+	}
+	
+	public Resultado deleteUsuario(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= Resultado.OK;
+		UsersRepository repo= new UsersRepository();
+		try {
+			repo.delete(repo.get(req.getParameter("userId")));
+		} catch (Exception e) {
+			logger.error("excepcion tratando de eliminar usario "+ e.getMessage(), e);
+			result= ErrorHelper.getError(106);
+		}
+		repo.close();
+		return result;
 	}
 	
 }

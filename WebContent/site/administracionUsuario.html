@@ -109,8 +109,8 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
-									data-dismiss="modal" ng-click="cerrar()">Cerrar</button>
-								<button type="submit" class="btn btn-primary">Guardar</button>
+									data-dismiss="modal" ng-click="cerrar()" ng-disabled="loading">Cerrar</button>
+								<button type="submit" class="btn btn-primary" ng-disabled="loading">Guardar</button>
 							</div>
 						</div>
 					</form>
