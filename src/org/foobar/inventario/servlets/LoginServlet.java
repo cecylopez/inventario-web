@@ -22,31 +22,13 @@ import com.foobar.inventario.util.ErrorHelper;
  */
 //Anotacion funciona en vez del web.xml usando una version de servlet 3.0 
 @WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private Logger logger=Logger.getLogger(this.getClass());
 	public static final String USUARIO_SESION= "usuario";
 	
 	public void init(){
 		BasicConfigurator.configure();
-	}
-
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-		Resultado result= ErrorHelper.getError(99);
-		String opt= req.getParameter("opt");
-		logger.debug("params: " + Arrays.toString(req.getParameterMap().keySet().toArray()));
-		if("logIn".equals(opt)){
-			result= logIn(req, resp);
-		}else if ("logOut".equals(opt)) {
-			result=logOut(req, resp);
-		}else if ("getUser".equals(opt)){
-			result=getUser(req, resp);
-		}else if("cambiarClave".equals(opt)){
-			result=cambiarClave(req, resp);
-		}
-		resp.setContentType("application/json");
-		resp.setCharacterEncoding("UTF-8");
-		resp.getWriter().write(result.toJson().toString());
 	}
 
 	public Resultado logIn(HttpServletRequest req, HttpServletResponse resp) {

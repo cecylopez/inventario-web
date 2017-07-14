@@ -1,13 +1,9 @@
 package org.foobar.inventario.servlets;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,33 +23,13 @@ import com.google.gson.JsonObject;
 
 
 @WebServlet("/UsuariosServlet")
-public class UsuariosServlet extends HttpServlet {
+public class UsuariosServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private Logger logger=Logger.getLogger(this.getClass());
 
-	
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Resultado result= ErrorHelper.getError(99);
-		String opt= req.getParameter("opt");
-		logger.debug("params: " + Arrays.toString(req.getParameterMap().keySet().toArray()));
-		if("getUsers".equals(opt)){
-			result=getUsers(req,resp);
-		}else if ("getRoles".equals(opt)) {
-			result=getRoles(req,resp);
-		}else if ("getDepartamentos".equals(opt)) {
-			result=getDepartamentos(req,resp);
-		}else if ("addUsuario".equals(opt)) {
-			result=addUsuario(req, resp);	
-		}else if ("deleteUsuario".equals(opt)) {
-			result=deleteUsuario(req,resp);
-		}
-		resp.setContentType("application/json");
-		resp.setCharacterEncoding("UTF-8");
-		resp.getWriter().write(result.toJson().toString());
-	}
 
 	public Resultado getUsers(HttpServletRequest req, HttpServletResponse resp){
-		Resultado res=Resultado.OK;
+		Resultado res=new Resultado(0, "OK");
 		List<Usuario> users;
 		JsonObject jsonUsuarios = new JsonObject();
 		JsonArray arr = new JsonArray();
@@ -76,7 +52,7 @@ public class UsuariosServlet extends HttpServlet {
 	}
 	
 	public Resultado getRoles(HttpServletRequest req, HttpServletResponse resp){
-		Resultado res=Resultado.OK;
+		Resultado res=new Resultado(0, "OK");
 		List<Rol> roles;
 		JsonObject jsonRoles = new JsonObject();
 		JsonArray arr= new JsonArray();
@@ -94,7 +70,7 @@ public class UsuariosServlet extends HttpServlet {
 	}
 	
 	public Resultado getDepartamentos(HttpServletRequest req, HttpServletResponse resp){
-		Resultado res=Resultado.OK;
+		Resultado res=new Resultado(0,"OK");
 		List<Departamento> departamentos;
 		JsonObject jsonDepartamentos= new JsonObject();
 		JsonArray arrDept= new JsonArray();
@@ -142,7 +118,7 @@ public class UsuariosServlet extends HttpServlet {
 		Resultado result= Resultado.OK;
 		UsersRepository repo= new UsersRepository();
 		try {
-			repo.delete(repo.get(req.getParameter("userId")));
+			repo.delete(repo.get(Integer.parseInt(req.getParameter("userId"))));
 		} catch (Exception e) {
 			logger.error("excepcion tratando de eliminar usario "+ e.getMessage(), e);
 			result= ErrorHelper.getError(106);

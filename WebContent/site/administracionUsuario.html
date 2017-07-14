@@ -39,12 +39,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="u in users">
-								<td>{{u.id}}</td>
-								<td>{{u.nombre}}</td>
-								<td>{{u.estado}}</td>
-								<td>{{u.rol}}</td>
-								<td>{{u.departamento}}</td>
+							<tr ng-repeat="u in users" >
+								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.id}}</td>
+								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.nombre}}</td>
+								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.estado}}</td>
+								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.rol}}</td>
+								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.departamento}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -53,7 +53,7 @@
 					<button type="button" class="btn btn-default" ng-disabled="loading"
 						data-toggle="modal" ng-click="showModal('add')">Agregar</button>
 					<button type="button" class="btn btn-default" ng-disabled="loading">Modificar</button>
-					<button type="button" class="btn btn-default" ng-disabled="loading">Eliminar</button>
+					<button type="button" class="btn btn-default" ng-disabled="loading" ng-click="deleteUsuario()">Eliminar</button>
 					<img src="../img/2.gif" height="25" ng-show="loading">
 				</div>
 			</div>
