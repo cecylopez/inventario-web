@@ -6,8 +6,11 @@ app.controller('usersController', function usersController($scope, $http){
 	$scope.roles=[];
 	$scope.departamentos=[];
 	$scope.filtroUsuarios="";
+	$scope.tituloModal="";
 	
-	$scope.showModal=function(){
+	$scope.showModal=function(mode){
+		$scope.tituloModal="Agregar Usuario";
+		var user={};
 		$scope.roles=[];
 		$scope.departamentos=[];
 		$http({
@@ -18,6 +21,15 @@ app.controller('usersController', function usersController($scope, $http){
 			responseType:"json"
 		}).then(function(response){
 		$scope.roles = response.data.contenido.roles;
+		if(mode=='edit'){
+			user=$scope.getSelectedUser()[0];
+			for(var i=0; i<$scope.roles.length; i++){
+				if($scope.roles[i].nombre==user.rol){
+					$scope.rol=$scope.roles[i];
+					break;
+				}
+			}
+		}
 		},function(){
 		});
 		$http({
@@ -28,8 +40,32 @@ app.controller('usersController', function usersController($scope, $http){
 			responseType:"json"
 		}).then(function(response){
 		$scope.departamentos = response.data.contenido.departamentos;
+		if(mode=='edit'){
+			user=$scope.getSelectedUser()[0];
+			for(var i=0; i<$scope.departamentos.length; i++){
+				if($scope.departamentos[i].nombre==user.departamento){
+					$scope.departamento=$scope.departamentos[i];
+					break;
+				}
+			}
+		}
 		},function(){
 		});
+		if(mode=='edit'){
+			$scope.tituloModal="Modificar Usuario";
+			
+			var arreglo=$scope.getSelectedUser();
+			if(arreglo.length===0){
+				$scope.loading=false;
+				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar un usuario", visible:true, clase: 'alert alert-danger'};
+				return;
+			}else{
+				user=arreglo[0];
+				$scope.mensaje={};
+			}
+			$scope.nombre=user.nombre;
+			$scope.clave=user.clave;	
+		}
 		$("#agregarModal").modal("show");
 	};
 	
@@ -49,12 +85,19 @@ app.controller('usersController', function usersController($scope, $http){
 		});
 	};
 	$scope.addUsuario=function(){
+		var operacion="addUsuario";
+		var param=jQuery.param({opt:operacion, nombre: $scope.nombre, clave: $scope.clave, rol: $scope.rol.id, departamento: $scope.departamento.id});
+		if($scope.tituloModal=="Modificar Usuario"){
+			var user=$scope.getSelectedUser()[0];
+			operacion="modifyUsuario";
+			param=jQuery.param({opt:operacion,id: user.id, nombre: $scope.nombre, clave: $scope.clave, rol: $scope.rol.id, departamento: $scope.departamento.id});
+		}
 		$scope.loading=true;
 		$http({
 			method:'POST',
 			url:'/inventario-web/UsuariosServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
-			data:jQuery.param({opt:"addUsuario", nombre: $scope.nombre, clave: $scope.clave, rol: $scope.rol.id, departamento: $scope.departamento.id}),
+			data:param,
 			responseType:"json"
 		}).then(function(response){
 		$scope.loading=false;
@@ -99,6 +142,7 @@ app.controller('usersController', function usersController($scope, $http){
 			return;
 		}else{
 			userId=arreglo[0].id;
+			$scope.mensaje={};
 		}
 		$http({
 			method:'POST',

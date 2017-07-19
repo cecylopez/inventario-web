@@ -28,7 +28,8 @@
 						usuarios</h3>
 				</div>
 				<div class="panel-body">
-				<input type="search" class="form-control" id="filtro" placeholder="filtrar" ng-model="filtroUsuarios">
+					<input type="search" class="form-control" id="filtro"
+						placeholder="filtrar" ng-model="filtroUsuarios">
 					<table class="table table-bordered table-hover table-condensed">
 						<thead>
 							<tr>
@@ -40,7 +41,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="u in users | filter:filtroUsuarios" >
+							<tr ng-repeat="u in users | filter:filtroUsuarios">
 								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.id}}</td>
 								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.nombre}}</td>
 								<td ng-class="{'info': u.selected}" ng-click="selectUser(u)">{{u.estado}}</td>
@@ -53,8 +54,10 @@
 				<div class="panel-footer" id="adminUsuariosPanel">
 					<button type="button" class="btn btn-default" ng-disabled="loading"
 						data-toggle="modal" ng-click="showModal('add')">Agregar</button>
-					<button type="button" class="btn btn-default" ng-disabled="loading">Modificar</button>
-					<button type="button" class="btn btn-default" ng-disabled="loading" ng-click="deleteUsuario()">Eliminar</button>
+					<button type="button" class="btn btn-default" ng-disabled="loading"
+						data-toggle="modal" ng-click="showModal('edit')">Modificar</button>
+					<button type="button" class="btn btn-default" ng-disabled="loading"
+						ng-click="deleteUsuario()">Eliminar</button>
 					<img src="../img/2.gif" height="25" ng-show="loading">
 				</div>
 			</div>
@@ -71,7 +74,7 @@
 									aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>
-								<h4 class="modal-title" id="myModalLabel">Agregar Usuario</h4>
+								<h4 class="modal-title" id="myModalLabel">{{tituloModal}}</h4>
 							</div>
 
 							<div class="modal-body">
@@ -90,7 +93,7 @@
 								<div class="form-group">
 									<label for="passUser">Clave</label> <input type="password"
 										class="form-control" id="claveUsr" placeholder="Password"
-										required="required" ng-model="clave">
+										ng-required="tituloModal=='Agregar Usuario'" ng-model="clave">
 
 								</div>
 								<div class="form-group">
@@ -111,7 +114,8 @@
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
 									data-dismiss="modal" ng-click="cerrar()" ng-disabled="loading">Cerrar</button>
-								<button type="submit" class="btn btn-primary" ng-disabled="loading">Guardar</button>
+								<button type="submit" class="btn btn-primary"
+									ng-disabled="loading">Guardar</button>
 							</div>
 						</div>
 					</form>

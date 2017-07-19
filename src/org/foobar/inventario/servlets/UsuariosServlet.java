@@ -92,6 +92,7 @@ public class UsuariosServlet extends BaseServlet {
 		try {
 			if(repo.get(req.getParameter("nombre")) !=null){
 				res= ErrorHelper.getError(105);
+				return res;
 				
 			}else {
 				List<Rol> roles=(List<Rol>)req.getSession(true).getAttribute("roles");
@@ -124,6 +125,39 @@ public class UsuariosServlet extends BaseServlet {
 			result= ErrorHelper.getError(106);
 		}
 		repo.close();
+		return result;
+	}
+	public Resultado modifyUsuario(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= Resultado.OK;
+		Usuario user= new Usuario();
+		UsersRepository repo= new UsersRepository();
+		try {
+			Usuario usrbd=repo.get(req.getParameter("nombre"));
+			if (usrbd !=null && usrbd.getId() !=Integer.parseInt(req.getParameter("id"))) {
+				result=ErrorHelper.getError(105);
+				return result;
+			}
+			if(req.getParameter("clave")==null || req.getParameter("clave").isEmpty()){
+				user.setClave(usrbd.getClave());
+			}else{
+				user.setClave(SecurityHelper.encriptar(req.getParameter("clave")));
+
+			}
+			List<Rol> roles=(List<Rol>)req.getSession(true).getAttribute("roles");
+			List<Departamento> departamentos=(List<Departamento>)req.getSession().getAttribute("departamentos");
+			user.setId(Integer.parseInt(req.getParameter("id")));
+			user.setNombre(req.getParameter("nombre"));
+			user.setEstado(Estado.ACTIVO);
+			user.setRol(roles.stream().filter(r ->r.getId()==Integer.parseInt(req.getParameter("rol"))).findFirst().get());
+			user.setDepartamento(departamentos.stream().filter(d ->d.getId()==Integer.parseInt(req.getParameter("departamento"))).findFirst().get());
+			repo.update(user);
+			
+			
+		} catch (Exception e) {
+			logger.error("Error al obtener informacion del usuario "+ e.getMessage(), e);
+			result=ErrorHelper.getError(108);
+		}
+		
 		return result;
 	}
 	
