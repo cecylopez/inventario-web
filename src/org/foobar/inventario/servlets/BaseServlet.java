@@ -21,7 +21,8 @@ import com.foobar.inventario.util.ErrorHelper;
 @WebServlet("/BaseServlet")
 public class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Logger logger=Logger.getLogger(this.getClass());
+	protected Logger logger=Logger.getLogger(this.getClass());
+	public static final int PAGE_SIZE_DEFAULT=20;
 
   
     public BaseServlet() {

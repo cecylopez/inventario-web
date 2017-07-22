@@ -25,7 +25,6 @@ import com.google.gson.JsonObject;
 @WebServlet("/UsuariosServlet")
 public class UsuariosServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private Logger logger=Logger.getLogger(this.getClass());
 
 
 	public Resultado getUsers(HttpServletRequest req, HttpServletResponse resp){

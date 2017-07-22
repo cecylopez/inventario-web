@@ -24,7 +24,6 @@ import com.foobar.inventario.util.ErrorHelper;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private Logger logger=Logger.getLogger(this.getClass());
 	public static final String USUARIO_SESION= "usuario";
 	
 	public void init(){
