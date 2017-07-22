@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Administracion de items</title>
+<link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"></link>
+<link href="../css/bootstrap/bootstrap-theme.min.css"></link>
+<link href="../css/estilos.css" rel="stylesheet"></link>
+<script type="text/javascript"
+	src="../js/angularjs/angular-1.6.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/dropdown.js"></script>
+<script type="text/javascript" src="../js/initController.js"></script>
+<script type="text/javascript" src="../js/loginController.js"></script>
+<script type="text/javascript" src="../js/itemsController.js"></script>
+<script type="text/javascript" src="../js/bootstrap/modal.js"></script>
+</head>
+
+<body ng-app="app">
+	<div ng-include="'templates/header.html'"></div>
+	<div class="container" ng-controller="itemsController">
+	<div class="col-sm-10 col-sm-offset-1">
+		<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
+			<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title" align="center">Administración de Items</h3>
+			</div>
+			<div class="panel-body">
+			<input type="search"  id="filtro" class="form-control"
+						placeholder="filtrar items" ng-model="filter">
+				<table class="table table-bordered table-hover table-condensed">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Nombre</th>
+							<th>Estado</th>
+							<th>Categoria</th>
+							<th>Cantidad</th>
+							<th>Cantidad Minima</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="i in items">
+							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.id}}</td>
+							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.nombre}}</td>
+							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.estado}}</td>
+							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.categoria}}</td>
+							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidad}}</td>
+							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidadMinima}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+			<div class="panel-footer"></div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

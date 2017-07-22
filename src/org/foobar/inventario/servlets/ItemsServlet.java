@@ -1,20 +1,16 @@
 package org.foobar.inventario.servlets;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Estado;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.ItemsRepository;
-import org.inventario.data.entities.Departamento;
 import org.inventario.data.entities.Item;
 import org.inventario.data.entities.Usuario;
 
@@ -36,7 +32,7 @@ public class ItemsServlet extends BaseServlet {
 		ItemsRepository itemRepo=  new ItemsRepository();
 		Usuario user=(Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
 		items=itemRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), Integer.parseInt(req.getParameter("startIndex")), BaseServlet.PAGE_SIZE_DEFAULT);
-		logger.debug("****cantidad de ITEMS encontrados******" + items.size());
+		logger.debug("****cantidad de ITEMS encontrados******" + Arrays.toString(items.toArray()));
 		for(Item item: items){
 			if (Estado.ACTIVO.equals(item.getEstado())) {
 				item.setEstado("Activo");
