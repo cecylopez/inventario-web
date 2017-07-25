@@ -19,4 +19,12 @@ app.controller('itemsController', function itemsController($scope, $http){
 		});
 	};
 	$scope.geItems();
+	
+	
+	$scope.doFilter = function($event) {
+		var keyCode = $event.keyCode; 
+		if (keyCode == 13) { 
+			$scope.geItems();
+		}
+	};
 });
