@@ -19,65 +19,59 @@
 <body ng-app="app">
 	<div ng-include="'templates/header.html'"></div>
 	<div class="container" ng-controller="itemsController">
-	<div class="col-sm-10 col-sm-offset-1">
-		<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
-			<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
-		</div>
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h3 class="panel-title" align="center">Administración de Items</h3>
+		<div class="col-sm-10 col-sm-offset-1">
+			<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
+				<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
 			</div>
-			<div class="panel-body">
-			<input type="search"  id="filtro" class="form-control"
-						placeholder="filtrar items" ng-model="filter" ng-keyup="doFilter($event)">
-				<table class="table table-bordered table-hover table-condensed">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Nombre</th>
-							<th>Estado</th>
-							<th>Categoria</th>
-							<th>Cantidad</th>
-							<th>Cantidad Minima</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="i in items">
-							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.id}}</td>
-							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.nombre}}</td>
-							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.estado}}</td>
-							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.categoria}}</td>
-							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidad}}</td>
-							<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidadMinima}}</td>
-						</tr>
-					</tbody>
-				</table>
-				<nav aria-label="Page navigation">
-  <ul class="pagination">
-    <li>
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">4</a></li>
-    <li><a href="#">5</a></li>
-    <li>
-      <a href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav>
-			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title" align="center">Administración de Items</h3>
+				</div>
+				<div class="panel-body">
+					<input type="search" id="filtro" class="form-control"
+						placeholder="filtrar items" ng-model="filter"
+						ng-keyup="doFilter($event)">
+					<table class="table table-bordered table-hover table-condensed">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre</th>
+								<th>Estado</th>
+								<th>Categoria</th>
+								<th>Cantidad</th>
+								<th>Cantidad Minima</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="i in items">
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.id}}</td>
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.nombre}}</td>
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.estado}}</td>
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.categoria}}</td>
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidad}}</td>
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidadMinima}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<nav aria-label="...">
+						<ul class="pager">
+							<li class="previous " ng-click="prevPage()" ng-class="{'disabled': !isPrevPage()}"><a href="#"><span
+									aria-hidden="true">&larr;</span> Anterior</a></li>
+							<li>Página
+								{{currentPage}}</li>
+							<li class="next" ng-click="nextPage()" ng-class="{'disabled': !isNextPage()}"><a href="#">Siguiente <span
+									aria-hidden="true">&rarr;</span></a></li>
+						</ul>
+					</nav>
+				</div>
 
 
-			<div class="panel-footer">
+				<div class="panel-footer">
+					<img src="../img/2.gif" height="25" ng-show="loading">
+
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>

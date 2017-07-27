@@ -25,13 +25,16 @@ public class ItemsServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 
 	public Resultado getItems(HttpServletRequest req, HttpServletResponse resp){
+		int index=((Integer.parseInt(req.getParameter("page")) - 1) * PAGE_SIZE_DEFAULT);
+		logger.debug("index: " + index);
 		Resultado result= Resultado.OK;
+		long total=0;
 		List<Item> items= new ArrayList<Item>(0);
 		JsonObject jsonItems= new JsonObject();
 		JsonArray arrayItems= new JsonArray();
 		ItemsRepository itemRepo=  new ItemsRepository();
 		Usuario user=(Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
-		items=itemRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), Integer.parseInt(req.getParameter("startIndex")), BaseServlet.PAGE_SIZE_DEFAULT);
+		items=itemRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), index, BaseServlet.PAGE_SIZE_DEFAULT);
 		logger.debug("****cantidad de ITEMS encontrados******" + Arrays.toString(items.toArray()));
 		for(Item item: items){
 			if (Estado.ACTIVO.equals(item.getEstado())) {
@@ -41,11 +44,19 @@ public class ItemsServlet extends BaseServlet {
 			}
 			arrayItems.add(item.toJson());
 		}
+		total=itemRepo.getTotal();
 		jsonItems.add("items", arrayItems);
+		jsonItems.addProperty("total", total);
+		jsonItems.addProperty("pageSize", PAGE_SIZE_DEFAULT);
 		result.setContenido(jsonItems);
 		itemRepo.close();
 		
 		this.logger.debug("==== \t\t Retornando resultado: " + result);
 		return result;
 	}
+	
+	
+	//Recibiendo(page):		1, 2, 3, 4, 5
+	//Pasar al Repo:	0, 20, 40, 60, 80, 100
+	//(
 }
