@@ -49,4 +49,11 @@ app.controller('itemsController', function itemsController($scope, $http){
 			$scope.getItems();
 		}
 	};
+	$scope.getItemColor=function(item){
+		if(item.cantidadDepto <= item.cantidadMinima){
+			return "item-insuficiente";
+		}else{
+			return "";
+		}
+	};
 });

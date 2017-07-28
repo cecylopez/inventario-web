@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.foobar.inventario.data.Estado;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.ItemsRepository;
+import org.inventario.data.entities.AsignacionItem;
 import org.inventario.data.entities.Item;
 import org.inventario.data.entities.Usuario;
 
@@ -42,7 +43,10 @@ public class ItemsServlet extends BaseServlet {
 			}else if (Estado.INACTIVO.equals(item.getEstado())) {
 				item.setEstado("Inactivo");
 			}
-			arrayItems.add(item.toJson());
+			JsonObject itemJson=item.toJson();
+			itemJson.addProperty("cantidadDepto", item.getAsignacionItems().get(0).getCantidad());
+			logger.debug("Asignacion items:"+Arrays.toString(item.getAsignacionItems().toArray()) );
+			arrayItems.add(itemJson);
 		}
 		total=itemRepo.getTotal();
 		jsonItems.add("items", arrayItems);

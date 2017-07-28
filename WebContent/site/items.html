@@ -38,8 +38,8 @@
 								<th>Nombre</th>
 								<th>Estado</th>
 								<th>Categoria</th>
-								<th>Cantidad</th>
-								<th>Cantidad Minima</th>
+								<th>Cantidad en Departamento</th>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -48,8 +48,8 @@
 								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.nombre}}</td>
 								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.estado}}</td>
 								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.categoria}}</td>
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidad}}</td>
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.cantidadMinima}}</td>
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)"><span ng-class="getItemColor(i)">{{i.cantidadDepto}}</span></td>
+								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)"></td>
 							</tr>
 						</tbody>
 					</table>
