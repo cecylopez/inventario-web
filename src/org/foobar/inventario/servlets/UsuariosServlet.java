@@ -1,5 +1,9 @@
 package org.foobar.inventario.servlets;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Estado;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.BaseRepository;
@@ -20,6 +23,7 @@ import org.inventario.util.SecurityHelper;
 import com.foobar.inventario.util.ErrorHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 @WebServlet("/UsuariosServlet")
@@ -157,6 +161,28 @@ public class UsuariosServlet extends BaseServlet {
 			result=ErrorHelper.getError(108);
 		}
 		
+		return result;
+	}
+	
+	public Resultado getMenu(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result=new Resultado(0, "OK");
+		String menuJson= "";
+		String strLinea=null;
+		
+		try (InputStream s = UsuariosServlet.class.getResourceAsStream("/org/foobar/inventario/properties/menu.json");
+				InputStreamReader isr = new InputStreamReader(s);
+				BufferedReader br= new BufferedReader(isr)) {
+			strLinea=br.readLine();
+			
+			while (strLinea!=null) {
+				menuJson += strLinea;
+				strLinea = br.readLine();
+			}
+			JsonParser parser= new JsonParser();
+			result.setContenido(parser.parse(menuJson).getAsJsonObject());
+		} catch (IOException e) {
+			logger.error("Error al tratar de leer el archivo json "+e.getMessage(), e);
+		}
 		return result;
 	}
 	

@@ -1,15 +1,10 @@
 package org.foobar.inventario.servlets;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.Usuario;

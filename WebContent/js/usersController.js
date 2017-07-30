@@ -7,6 +7,7 @@ app.controller('usersController', function usersController($scope, $http){
 	$scope.departamentos=[];
 	$scope.filtroUsuarios="";
 	$scope.tituloModal="";
+	$scope.menu="";
 	
 	$scope.showModal=function(mode){
 		$scope.tituloModal="Agregar Usuario";

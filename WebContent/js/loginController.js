@@ -1,6 +1,6 @@
 
 app.controller('loginController', function loginController($scope, $http){
-	$scope.usr={id:0, nombre:'', clave:''};
+	$scope.usr={id:0, nombre:'', clave:'', rol: ''};
 	$scope.mensajer={titulo:'', mensaje:'', visible:false, clase: 'alert alert-danger'};
 	$scope.loading=false;
 	$scope.cambiarClave=function(){
@@ -40,6 +40,8 @@ app.controller('loginController', function loginController($scope, $http){
 			if(response.data.codigo===0){
 				$scope.usr.id=response.data.contenido.id;
 				$scope.usr.nombre=response.data.contenido.nombre;
+				$scope.usr.rol=response.data.contenido.rol;
+				$scope.getMenu();
 				
 			}else if(response.data.codigo===0){
 					window.location.href='inventario-web/login.html'
@@ -85,6 +87,32 @@ app.controller('loginController', function loginController($scope, $http){
 			$scope.loading=false;
 		});
 	
+	};
+	
+	$scope.getMenu=function(){
+		$http({
+			method:'POST',
+			url:'/inventario-web/UsuariosServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"getMenu"}),
+			responseType:"json"
+		}).then(function(response){
+			if(response.data.codigo==0){
+				$scope.menu=response.data.contenido.menu;
+			}else{
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+			}
+		},function(){
+		});
+	};
+	
+	$scope.menuVisible = function(m) {
+		for (var i=0; i<m.roles.length; i++) {
+			if ($scope.usr.rol == m.roles[i]) {
+				return true;
+			}
+		}
+		return false;
 	};
 	
 });

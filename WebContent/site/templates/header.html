@@ -18,17 +18,11 @@
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">{{usr.nombre}} <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a ng-click="" href="/inventario-web/site/usuarios.html">Administración
-									de usuarios</a></li>
-							<li><a ng-click=""
-								href="/inventario-web/site/items.html">Administración de items</a></li>
-
-							<li><a ng-click=""
-								href="/inventario-web/site/cambioContrasena.html">Cambiar
-									Contraseña</a></li>
+							<li ng-repeat="m in menu" ng-show="menuVisible(m)">
+								<a href="{{m.url}}">{{m.nombre}}</a>
+							</li>
 							<li role="separator" class="divider"></li>
-							<li><a ng-click="logOut()" href="javascript:void(0)">Cerrar
-									Sesión</a></li>
+							<li><a ng-click="logOut()" href="javascript:void(0)">Cerrar Sesión</a></li>
 
 						</ul></li>
 				</ul>
