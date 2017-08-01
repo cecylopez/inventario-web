@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Solicitudes</title>
+<link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"></link>
+<link href="../css/bootstrap/bootstrap-theme.min.css"></link>
+<link href="../css/estilos.css" rel="stylesheet"></link>
+<script type="text/javascript"
+	src="../js/angularjs/angular-1.6.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/dropdown.js"></script>
+<script type="text/javascript" src="../js/initController.js"></script>
+<script type="text/javascript" src="../js/loginController.js"></script>
+<script type="text/javascript" src="../js/solicitudesController.js"></script>
+<script type="text/javascript" src="../js/bootstrap/modal.js"></script>
+</head>
+<body ng-app="app">
+	<div ng-include="'templates/header.html'"></div>
+	<div class="container" ng-controller="solicitudesController">
+		<div class="col-sm-10 col-sm-offset-1">
+			<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
+				<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title" align="center">Solicitud de Ítems</h3>
+				</div>
+				<div class="panel-body">
+					<input type="search" id="filtro" class="form-control"
+						placeholder="filtrar " ng-model="filter"
+						ng-keyup="doFilter($event)">
+					<table class="table table-bordered table-hover table-condensed">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Solicitante</th>
+								<th>Fecha de Solicitud</th>
+								<th>Ítem</th>
+								<th>Cantidad</th>
+								<th>Autorizador</th>
+								<th>Fecha de autorización</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="s in solicitudes">
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.id}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.solicitante}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.fechaSolicitud}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.item}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.cantidad}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.autorizador}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.fechaAutorizacion}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)"></td>
+								
+								
+							</tr>
+						</tbody>
+					</table>
+					<nav aria-label="...">
+						<ul class="pager">
+							<li class="previous " ng-click="prevPage()"
+								ng-class="{'disabled': !isPrevPage()}"><a href="#"><span
+									aria-hidden="true">&larr;</span> Anterior</a></li>
+							<li>Página {{currentPage}}</li>
+							<li class="next" ng-click="nextPage()"
+								ng-class="{'disabled': !isNextPage()}"><a href="#">Siguiente
+									<span aria-hidden="true">&rarr;</span>
+							</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="panel-footer">
+						<button type="button" class="btn btn-default" ng-disabled="loading"
+						data-toggle="modal" ng-click="showModal('add')">Agregar</button>
+						<button type="button" class="btn btn-default" ng-disabled="loading"
+						data-toggle="modal" ng-click="showModal('edit')">Modificar</button>
+						<button type="button" class="btn btn-default">Eliminar</button>
+						
+					<img src="../img/2.gif" height="25" ng-show="loading">
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>
