@@ -44,5 +44,29 @@ public class SolicitudesServlet extends BaseServlet {
 		solicitudesRepo.close();
 		return result;
 	}
+	
+	/*public Resultado aprobarSolicitud(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= new Resultado(0, "OK");
+		SolicitudesRepository solicitudRepo= new SolicitudesRepository();
+		SolicitudAsignacion solicitud= solicitudRepo.get(Long.valueOf(req.getParameter("idSolicitud")));
+		DepartamentoRepository deptoRepo= new DepartamentoRepository();
+		Departamento bodega= deptoRepo.get(deptoRepo.BODEGA);
+		ItemsRepository itemRepo= new ItemsRepository();
+		AsignacionItem asignacionItemEnBodega=itemRepo.get(bodega.getId(), solicitud.getAsignacionItem().getItem().getId());
+		if(asignacionItemEnBodega.getCantidad()<solicitud.getAsignacionItem().getCantidad()){
+			return ErrorHelper.getError(200);
+		}else{
+			Usuario user= (Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
+			solicitud.setFechaAutorizacion(new Date());
+			solicitud.setUsuario2(user);
+			asignacionItemEnBodega.setCantidad(asignacionItemEnBodega.getCantidad()- solicitud.getAsignacionItem().getCantidad());
+			solicitudRepo.update(solicitud);
+			result.setRazon("Solicitud Aprobada");
+		}
+	
+		return result;
+	}*/
+	
+	
 
 }
