@@ -18,7 +18,7 @@
 <body ng-app="app">
 	<div ng-include="'templates/header.html'"></div>
 	<div class="container" ng-controller="solicitudesController">
-		<div class="col-sm-10 col-sm-offset-1">
+		<div class="col-sm-12 >
 			<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
 				<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
 			</div>
@@ -38,6 +38,7 @@
 								<th>Fecha de Solicitud</th>
 								<th>Ítem</th>
 								<th>Cantidad</th>
+								<th>Estado</th>
 								<th>Autorizador</th>
 								<th>Fecha de autorización</th>
 								<th>Acciones</th>
@@ -50,9 +51,11 @@
 								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.fechaSolicitud}}</td>
 								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.item}}</td>
 								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.cantidad}}</td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.estado}}</td>
+								
 								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.autorizador}}</td>
 								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.fechaAutorizacion}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)"></td>
+								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)"><div class="columnaAcciones"><a href="javascript:void(0)">aprobar</a> | <a href="javascript:void(0)">recharzar</a></div></td>
 								
 								
 							</tr>

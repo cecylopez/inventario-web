@@ -34,6 +34,11 @@ public class SolicitudesServlet extends BaseServlet {
 		Usuario user=(Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
 		solicitudes= solicitudesRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), index, BaseServlet.PAGE_SIZE_DEFAULT);
 		for(SolicitudAsignacion solicitud: solicitudes){
+			if(Estado.ACTIVO.equals(solicitud.getEstado())){
+				solicitud.setEstado("Aprobado");
+			}else if (Estado.PENDIENTE.equals(solicitud.getEstado())) {
+				solicitud.setEstado("Pendiente");
+			}
 			solicitudesArray.add(solicitud.toJson());
 		}
 		solicitudesJson.add("solicitudes", solicitudesArray);

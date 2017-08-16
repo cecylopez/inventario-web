@@ -26,3 +26,6 @@ div#agregarModal input{
 .item-insuficiente{
 	color:red;
 }
+.columnaAcciones{
+	width: 120px;
+}
