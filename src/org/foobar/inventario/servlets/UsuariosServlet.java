@@ -11,9 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.foobar.inventario.data.Estado;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.BaseRepository;
+import org.inventario.data.Status;
 import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.Departamento;
 import org.inventario.data.entities.Rol;
@@ -38,11 +38,11 @@ public class UsuariosServlet extends BaseServlet {
 		JsonArray arr = new JsonArray();
 		
 		UsersRepository repo= new UsersRepository();
-		users=repo.getAll().stream().filter(u -> !u.getEstado().equals(Estado.ELIMINADO)).collect(Collectors.toList());
+		users=repo.getAll().stream().filter(u -> !u.getEstado().equals(Status.ELIMINADO)).collect(Collectors.toList());
 		for (Usuario usr: users) {
-			if(Estado.ACTIVO.equals(usr.getEstado())){
+			if(Status.ACTIVO.equals(usr.getEstado())){
 				usr.setEstado("Activo");
-			}else if (Estado.INACTIVO.equals(usr.getEstado())) {
+			}else if (Status.INACTIVO.equals(usr.getEstado())) {
 				usr.setEstado("Inactivo");
 			}
 			arr.add(usr.toJson());
@@ -105,7 +105,7 @@ public class UsuariosServlet extends BaseServlet {
 				user.setClave(SecurityHelper.encriptar(req.getParameter("clave")));
 				user.setRol(roles.stream().filter(r ->r.getId()==Integer.parseInt(req.getParameter("rol"))).findFirst().get());
 				user.setDepartamento(departamentos.stream().filter(d ->d.getId()==Integer.parseInt(req.getParameter("departamento"))).findFirst().get());
-				user.setEstado(Estado.ACTIVO);
+				user.setEstado(Status.ACTIVO);
 				repo.add(user);
 			}
 		
@@ -150,7 +150,7 @@ public class UsuariosServlet extends BaseServlet {
 			List<Departamento> departamentos=(List<Departamento>)req.getSession().getAttribute("departamentos");
 			user.setId(Integer.parseInt(req.getParameter("id")));
 			user.setNombre(req.getParameter("nombre"));
-			user.setEstado(Estado.ACTIVO);
+			user.setEstado(Status.ACTIVO);
 			user.setRol(roles.stream().filter(r ->r.getId()==Integer.parseInt(req.getParameter("rol"))).findFirst().get());
 			user.setDepartamento(departamentos.stream().filter(d ->d.getId()==Integer.parseInt(req.getParameter("departamento"))).findFirst().get());
 			repo.update(user);

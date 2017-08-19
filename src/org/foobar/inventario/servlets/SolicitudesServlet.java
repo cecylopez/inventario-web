@@ -2,6 +2,7 @@ package org.foobar.inventario.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,12 +11,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.foobar.inventario.data.Estado;
+import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Resultado;
+import org.inventario.data.DepartamentoRepository;
+import org.inventario.data.ItemsRepository;
 import org.inventario.data.SolicitudesRepository;
+import org.inventario.data.Status;
+import org.inventario.data.entities.AsignacionItem;
+import org.inventario.data.entities.Departamento;
 import org.inventario.data.entities.SolicitudAsignacion;
 import org.inventario.data.entities.Usuario;
 
+import com.foobar.inventario.util.ErrorHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -34,10 +41,12 @@ public class SolicitudesServlet extends BaseServlet {
 		Usuario user=(Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
 		solicitudes= solicitudesRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), index, BaseServlet.PAGE_SIZE_DEFAULT);
 		for(SolicitudAsignacion solicitud: solicitudes){
-			if(Estado.ACTIVO.equals(solicitud.getEstado())){
+			if(Status.ACTIVO.equals(solicitud.getEstado())){
 				solicitud.setEstado("Aprobado");
-			}else if (Estado.PENDIENTE.equals(solicitud.getEstado())) {
+			}else if (Status.PENDIENTE.equals(solicitud.getEstado())) {
 				solicitud.setEstado("Pendiente");
+			}else if(Status.RECHAZADO.equals(solicitud.getEstado())){
+				solicitud.setEstado("Rechazado");
 			}
 			solicitudesArray.add(solicitud.toJson());
 		}
@@ -50,7 +59,7 @@ public class SolicitudesServlet extends BaseServlet {
 		return result;
 	}
 	
-	/*public Resultado aprobarSolicitud(HttpServletRequest req, HttpServletResponse resp){
+	public Resultado aprobarSolicitud(HttpServletRequest req, HttpServletResponse resp){
 		Resultado result= new Resultado(0, "OK");
 		SolicitudesRepository solicitudRepo= new SolicitudesRepository();
 		SolicitudAsignacion solicitud= solicitudRepo.get(Long.valueOf(req.getParameter("idSolicitud")));
@@ -66,12 +75,30 @@ public class SolicitudesServlet extends BaseServlet {
 			solicitud.setUsuario2(user);
 			asignacionItemEnBodega.setCantidad(asignacionItemEnBodega.getCantidad()- solicitud.getAsignacionItem().getCantidad());
 			solicitudRepo.update(solicitud);
+			
 			result.setRazon("Solicitud Aprobada");
 		}
 	
 		return result;
-	}*/
+	}
 	
+	public Resultado rechazarSolicitud(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= new Resultado(0, "OK");
+		try {
+			SolicitudesRepository solicitudRepo= new SolicitudesRepository();
+			SolicitudAsignacion solicitud=solicitudRepo.get(Long.valueOf(req.getParameter("idSolicitud")));
+			solicitud.setEstado(Status.RECHAZADO);
+			solicitud.setUsuario2((Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION));
+			solicitud.setFechaAutorizacion(new Date());
+			solicitudRepo.update(solicitud);
+			result.setRazon("la solicitud ha sido rechazada correctamente");
+		} catch (Exception e) {
+			logger.error(ErrorHelper.getError(109) + e.getMessage(),e);
+			result=ErrorHelper.getError(109);
+		}
+	
+		return result;
+	}
 	
 
 }

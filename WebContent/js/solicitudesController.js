@@ -5,6 +5,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 	$scope.total=0;
 	$scope.pageSize=0;
 	$scope.solicitudes=[];
+
 	
 	$scope.getSolicitudes=function(){
 		$scope.loading=true;
@@ -48,6 +49,64 @@ app.controller('solicitudesController', function usersController($scope, $http){
 			$scope.currentPage-=1;
 			$scope.getSolicitudes();
 		}
+	};
+	 $scope.showAcciones=function(solicitud){
+		 return solicitud.estado=="Pendiente";
+	 };
+	 
+	 $scope.selectSolicitud=function(solicitud){
+			$scope.getSelectedSolicitud().forEach(function(s) {
+				s.selected=false;
+			});
+			
+			solicitud.selected=true;
+			
+	};
+	$scope.getSelectedSolicitud=function(){
+		return $scope.solicitudes.filter(s => s.selected);
+	};
+	$scope.rechazarSolicitud=function(solicitud){
+		$scope.loading=true;
+		$http({
+			method:'POST',
+			url:'/inventario-web/SolicitudesServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"rechazarSolicitud", idSolicitud: solicitud.id}),
+			responseType:"json"
+		}).then(function(response){
+			if(response.data.codigo===0){
+				$scope.loading=false;
+				$scope.mensaje={titulo:'OK', mensaje:response.data.razon, visible:true, clase: 'alert alert-success'};
+				$scope.getSolicitudes();
+			}else{
+				$scope.loading=false;
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+				$scope.getSolicitudes();
+			}
+
+		},function(){});
+		
+	};
+	
+	$scope.aprobarSolicitud=function(solicitud){
+		$scope.loading=true;
+		$http({
+			method:'POST',
+			url:'/inventario-web/SolicitudesServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"aprobarSolicitud", idSolicitud: solicitud.id}),
+			responseType:"json"
+		}).then(function(response){
+			if(response.data.codigo===0){
+				$scope.loading=false;
+				$scope.mensaje={titulo:'OK', mensaje:response.data.razon, visible:true, clase: 'alert alert-success'};
+				$scope.getSolicitudes();
+			}else{
+				$scope.loading=false;
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+				$scope.getSolicitudes();
+			}
+		},function(){});	
 	};
 
 });

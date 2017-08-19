@@ -8,9 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.foobar.inventario.data.Estado;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.ItemsRepository;
+import org.inventario.data.Status;
 import org.inventario.data.entities.AsignacionItem;
 import org.inventario.data.entities.Item;
 import org.inventario.data.entities.Usuario;
@@ -38,9 +38,9 @@ public class ItemsServlet extends BaseServlet {
 		items=itemRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), index, BaseServlet.PAGE_SIZE_DEFAULT);
 		logger.debug("****cantidad de ITEMS encontrados******" + Arrays.toString(items.toArray()));
 		for(Item item: items){
-			if (Estado.ACTIVO.equals(item.getEstado())) {
+			if (Status.ACTIVO.equals(item.getEstado())) {
 				item.setEstado("Activo");
-			}else if (Estado.INACTIVO.equals(item.getEstado())) {
+			}else if (Status.INACTIVO.equals(item.getEstado())) {
 				item.setEstado("Inactivo");
 			}
 			JsonObject itemJson=item.toJson();
