@@ -18,7 +18,7 @@
 <body ng-app="app">
 	<div ng-include="'templates/header.html'"></div>
 	<div class="container" ng-controller="solicitudesController">
-		<div class="col-sm-12" >
+		<div class="col-sm-12">
 			<div ng-class="mensaje.clase" role="alert" ng-show="mensaje.visible">
 				<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
 			</div>
@@ -46,18 +46,31 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="s in solicitudes">
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.id}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.solicitante}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.fechaSolicitud}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.item}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.cantidad}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.estado}}</td>
-								
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.autorizador}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)">{{s.fechaAutorizacion}}</td>
-								<td ng-class="{'info': s.selected}" ng-click="selectSolicitud(s)"><div class="columnaAcciones" ng-show="showAcciones(s)"><a href="javascript:void(0)" ng-click="aprobarSolicitud(s)">aprobar</a> | <a href="javascript:void(0)" ng-click="rechazarSolicitud(s)">recharzar</a></div></td>
-								
-								
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.id}}</td>
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.solicitante}}</td>
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.fechaSolicitud}}</td>
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.item}}</td>
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.cantidad}}</td>
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.estado}}</td>
+
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.autorizador}}</td>
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)">{{s.fechaAutorizacion}}</td>
+								<td ng-class="{'info': s.selected}"
+									ng-click="selectSolicitud(s)"><div class="columnaAcciones"
+										ng-show="showAcciones(s)">
+										<a href="javascript:void(0)" ng-click="aprobarSolicitud(s)">aprobar</a>
+										| <a href="javascript:void(0)" ng-click="rechazarSolicitud(s)">recharzar</a>
+									</div></td>
+
+
 							</tr>
 						</tbody>
 					</table>
@@ -75,16 +88,43 @@
 					</nav>
 				</div>
 				<div class="panel-footer">
-						<button type="button" class="btn btn-default" ng-disabled="loading"
+					<button type="button" class="btn btn-default" ng-disabled="loading"
 						data-toggle="modal" ng-click="showModal('add')">Agregar</button>
-						<button type="button" class="btn btn-default" ng-disabled="loading"
+					<button type="button" class="btn btn-default" ng-disabled="loading"
 						data-toggle="modal" ng-click="showModal('edit')">Modificar</button>
-						<button type="button" class="btn btn-default">Eliminar</button>
-						
+					<button type="button" class="btn btn-default" ng-disabled="loading" ng-click="deleteSolicitud()">Eliminar</button>
+
 					<img src="../img/2.gif" height="25" ng-show="loading">
 				</div>
 			</div>
+			<div class="modal fade" id="agregarModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
 
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">{{tituloModal}}</h4>
+						</div>
+						<div class="modal-body">
+							<div ng-class="mensaje.clase" role="alert"
+								ng-show="mensaje.visible">
+								<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal" ng-click="cerrar()" ng-disabled="loading">Cerrar</button>
+							<button type="submit" class="btn btn-primary"
+								ng-disabled="loading">Guardar</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
 		</div>
 
 	</div>

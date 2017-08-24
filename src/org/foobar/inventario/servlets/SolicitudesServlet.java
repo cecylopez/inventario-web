@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import org.inventario.data.DepartamentoRepository;
 import org.inventario.data.ItemsRepository;
 import org.inventario.data.SolicitudesRepository;
 import org.inventario.data.Status;
+import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.AsignacionItem;
 import org.inventario.data.entities.Departamento;
 import org.inventario.data.entities.SolicitudAsignacion;
@@ -49,7 +51,10 @@ public class SolicitudesServlet extends BaseServlet {
 			}else if(Status.RECHAZADO.equals(solicitud.getEstado())){
 				solicitud.setEstado("Rechazado");
 			}
-			solicitudesArray.add(solicitud.toJson());
+			if(!solicitud.getEstado().equals(Status.ELIMINADO)){
+				solicitudesArray.add(solicitud.toJson());
+
+			}
 		}
 		solicitudesJson.add("solicitudes", solicitudesArray);
 		total=solicitudesRepo.getTotal();
@@ -104,6 +109,21 @@ public class SolicitudesServlet extends BaseServlet {
 			result=ErrorHelper.getError(109);
 		}
 	
+		return result;
+	}
+	public Resultado deleteSolicitud(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= Resultado.OK;
+		SolicitudesRepository solicitudRepo= new SolicitudesRepository();
+		SolicitudAsignacion solicitud= solicitudRepo.get(Long.valueOf(req.getParameter("idSolicitud")));
+
+		try {
+			solicitud.setEstado(Status.ELIMINADO);
+			solicitudRepo.update(solicitud);
+		} catch (Exception e) {
+			logger.error("Error al tratar de eliminar la solicitud "+ e.getMessage(), e);
+			result= ErrorHelper.getError(201);
+		}
+		solicitudRepo.close();
 		return result;
 	}
 	

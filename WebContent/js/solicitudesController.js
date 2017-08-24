@@ -108,5 +108,42 @@ app.controller('solicitudesController', function usersController($scope, $http){
 			}
 		},function(){});	
 	};
+	
+	$scope.deleteSolicitud=function(){
+		if(!confirm("Esta seguro de que quiere eliminar esta solicitud? ")){
+			return;
+		}
+		var idSolicitud=0;
+		$scope.loading=true;
+		var arreglo=$scope.getSelectedSolicitud();
+		if(arreglo.length===0){
+			$scope.loading=false;
+			$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud ", visible:true, clase: 'alert alert-danger'};
+			return;
+		}else{
+			idSolicitud=arreglo[0].id;
+			$scope.mensaje={};
+		}
+		$http({
+			method:'POST',
+			url:'/inventario-web/SolicitudesServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"deleteSolicitud", idSolicitud: idSolicitud}),
+			responseType:"json"
+		}).then(function(response){
+		$scope.loading=false;
+		if(response.data.codigo===0){
+			$scope.mensaje={titulo:'OK', mensaje:'Solicitud eleminada satisfactoriamente', visible:true, clase: 'alert alert-success'};
+			$scope.getSolicitudes();
+		}else{
+			$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+		}
+		
+		},function(){
+		});
+
+
+
+	};
 
 });
