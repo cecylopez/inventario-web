@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Resultado;
+import org.inventario.data.BaseRepository;
 import org.inventario.data.DepartamentoRepository;
 import org.inventario.data.ItemsRepository;
 import org.inventario.data.SolicitudesRepository;
@@ -66,15 +67,21 @@ public class SolicitudesServlet extends BaseServlet {
 		DepartamentoRepository deptoRepo= new DepartamentoRepository();
 		Departamento bodega= deptoRepo.get(deptoRepo.BODEGA);
 		ItemsRepository itemRepo= new ItemsRepository();
+		BaseRepository<AsignacionItem> asignacionItemRepository= new BaseRepository<>(AsignacionItem.class);
 		AsignacionItem asignacionItemEnBodega=itemRepo.get(bodega.getId(), solicitud.getAsignacionItem().getItem().getId());
-		if(asignacionItemEnBodega.getCantidad()<solicitud.getAsignacionItem().getCantidad()){
+		if(asignacionItemEnBodega.getCantidad()<solicitud.getCantidad()){
 			return ErrorHelper.getError(200);
 		}else{
 			Usuario user= (Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
 			solicitud.setFechaAutorizacion(new Date());
 			solicitud.setUsuario2(user);
-			asignacionItemEnBodega.setCantidad(asignacionItemEnBodega.getCantidad()- solicitud.getAsignacionItem().getCantidad());
+			solicitud.setEstado(Status.ACTIVO);
+			asignacionItemEnBodega.setCantidad(asignacionItemEnBodega.getCantidad()- solicitud.getCantidad());
+			solicitud.getAsignacionItem().setCantidad(solicitud.getAsignacionItem().getCantidad() + solicitud.getCantidad());
 			solicitudRepo.update(solicitud);
+			asignacionItemRepository.update(asignacionItemEnBodega);
+			asignacionItemRepository.update(solicitud.getAsignacionItem());
+
 			
 			result.setRazon("Solicitud Aprobada");
 		}
