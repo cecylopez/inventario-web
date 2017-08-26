@@ -41,6 +41,7 @@ app.controller('loginController', function loginController($scope, $http){
 				$scope.usr.id=response.data.contenido.id;
 				$scope.usr.nombre=response.data.contenido.nombre;
 				$scope.usr.rol=response.data.contenido.rol;
+				$scope.usr.departamento=response.data.contenido.departamento;
 				$scope.getMenu();
 				
 			}else if(response.data.codigo===0){
