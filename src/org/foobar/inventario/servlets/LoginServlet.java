@@ -11,6 +11,7 @@ import org.inventario.data.entities.Usuario;
 import org.inventario.util.SecurityHelper;
 
 import com.foobar.inventario.util.ErrorHelper;
+import com.foobar.inventario.util.SessionHelper;
 
 /**
  * Servlet implementation class LoginServlet
@@ -19,7 +20,6 @@ import com.foobar.inventario.util.ErrorHelper;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String USUARIO_SESION= "usuario";
 	
 	public void init(){
 		BasicConfigurator.configure();
@@ -32,7 +32,7 @@ public class LoginServlet extends BaseServlet {
 		if (user != null) {
 			user.setClave("");
 			r = new Resultado(0, "OK", user, "usuario");
-			req.getSession(true).setAttribute(USUARIO_SESION, user);
+			req.getSession(true).setAttribute(SessionHelper.USUARIO_SESION, user);
 		} else {
 			r = ErrorHelper.getError(100);
 		}
@@ -43,7 +43,7 @@ public class LoginServlet extends BaseServlet {
 
 	public Resultado logOut(HttpServletRequest req, HttpServletResponse resp) {
 		if (req.getSession() != null) {
-			req.getSession().removeAttribute(USUARIO_SESION);
+			req.getSession().removeAttribute(SessionHelper.USUARIO_SESION);
 			req.getSession().invalidate();
 		}
 		return Resultado.OK;
@@ -51,19 +51,19 @@ public class LoginServlet extends BaseServlet {
 	
 	public Resultado getUser(HttpServletRequest req, HttpServletResponse resp){
 		Resultado rest= ErrorHelper.getError(101);
-		if(req.getSession()!=null && req.getSession().getAttribute(USUARIO_SESION) !=null && req.getSession().getAttribute(USUARIO_SESION) instanceof Usuario){
+		if(req.getSession()!=null && req.getSession().getAttribute(SessionHelper.USUARIO_SESION) !=null && req.getSession().getAttribute(SessionHelper.USUARIO_SESION) instanceof Usuario){
 			rest.setCodigo(0);
 			rest.setRazon("OK");
-			rest.setContenido(((Usuario)req.getSession().getAttribute(USUARIO_SESION)).toJson());
+			rest.setContenido(((Usuario)req.getSession().getAttribute(SessionHelper.USUARIO_SESION)).toJson());
 		}
 		return rest;
 	}
 	
 	public Resultado cambiarClave(HttpServletRequest req, HttpServletResponse resp){
 		Resultado rest=Resultado.OK;
-		if(req.getSession()!=null && req.getSession().getAttribute(USUARIO_SESION) !=null && req.getSession().getAttribute(USUARIO_SESION) instanceof Usuario){
+		if(req.getSession()!=null && req.getSession().getAttribute(SessionHelper.USUARIO_SESION) !=null && req.getSession().getAttribute(SessionHelper.USUARIO_SESION) instanceof Usuario){
 			String claveActual=req.getParameter("claveActual");
-			Usuario	usr=(Usuario)req.getSession().getAttribute(USUARIO_SESION);
+			Usuario	usr=(Usuario)req.getSession().getAttribute(SessionHelper.USUARIO_SESION);
 			UsersRepository repo= new UsersRepository();
 			Usuario usuarioB= repo.get(usr.getId());
 			String claveActualVerificar= usuarioB.getClave();

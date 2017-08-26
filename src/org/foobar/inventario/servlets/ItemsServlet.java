@@ -15,6 +15,7 @@ import org.inventario.data.entities.AsignacionItem;
 import org.inventario.data.entities.Item;
 import org.inventario.data.entities.Usuario;
 
+import com.foobar.inventario.util.SessionHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -34,7 +35,7 @@ public class ItemsServlet extends BaseServlet {
 		JsonObject jsonItems= new JsonObject();
 		JsonArray arrayItems= new JsonArray();
 		ItemsRepository itemRepo=  new ItemsRepository();
-		Usuario user=(Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
+		Usuario user=(Usuario)SessionHelper.getUsuarioSession(req.getSession(true));
 		items=itemRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), index, BaseServlet.PAGE_SIZE_DEFAULT);
 		logger.debug("****cantidad de ITEMS encontrados******" + Arrays.toString(items.toArray()));
 		for(Item item: items){
@@ -58,9 +59,28 @@ public class ItemsServlet extends BaseServlet {
 		this.logger.debug("==== \t\t Retornando resultado: " + result);
 		return result;
 	}
-	
+	public Resultado getAllItems(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= new Resultado(0, "OK");
+		ItemsRepository itemRepo= new ItemsRepository();
+		List<Item> items= new ArrayList<Item>(0);
+		JsonObject itemObject= new JsonObject();
+		JsonArray itemArray= new JsonArray();
+		items= itemRepo.getAll();
+		for(Item item: items){
+			if (Status.ACTIVO.equals(item.getEstado())) {
+				item.setEstado("Activo");
+			}else if (Status.INACTIVO.equals(item.getEstado())) {
+				item.setEstado("Inactivo");
+			}
+			itemObject=item.toJson();
+			
+		return result;
+	}
+	return result;
+	}
+}
 	
 	//Recibiendo(page):		1, 2, 3, 4, 5
 	//Pasar al Repo:	0, 20, 40, 60, 80, 100
 	//(
-}
+

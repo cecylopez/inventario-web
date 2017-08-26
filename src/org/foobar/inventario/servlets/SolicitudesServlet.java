@@ -26,6 +26,7 @@ import org.inventario.data.entities.SolicitudAsignacion;
 import org.inventario.data.entities.Usuario;
 
 import com.foobar.inventario.util.ErrorHelper;
+import com.foobar.inventario.util.SessionHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -41,7 +42,7 @@ public class SolicitudesServlet extends BaseServlet {
 		JsonObject solicitudesJson= new JsonObject();
 		JsonArray solicitudesArray= new JsonArray();
 		SolicitudesRepository solicitudesRepo= new SolicitudesRepository();
-		Usuario user=(Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
+		Usuario user=SessionHelper.getUsuarioSession(req.getSession(true));
 		solicitudes= solicitudesRepo.get(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"), index, BaseServlet.PAGE_SIZE_DEFAULT);
 		for(SolicitudAsignacion solicitud: solicitudes){
 			if(Status.ACTIVO.equals(solicitud.getEstado())){
@@ -77,7 +78,7 @@ public class SolicitudesServlet extends BaseServlet {
 		if(asignacionItemEnBodega.getCantidad()<solicitud.getCantidad()){
 			return ErrorHelper.getError(200);
 		}else{
-			Usuario user= (Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
+			Usuario user= (Usuario)SessionHelper.getUsuarioSession(req.getSession(true));
 			solicitud.setFechaAutorizacion(new Date());
 			solicitud.setUsuario2(user);
 			solicitud.setEstado(Status.ACTIVO);
@@ -100,7 +101,7 @@ public class SolicitudesServlet extends BaseServlet {
 			SolicitudesRepository solicitudRepo= new SolicitudesRepository();
 			SolicitudAsignacion solicitud=solicitudRepo.get(Long.valueOf(req.getParameter("idSolicitud")));
 			solicitud.setEstado(Status.RECHAZADO);
-			solicitud.setUsuario2((Usuario)req.getSession(true).getAttribute(LoginServlet.USUARIO_SESION));
+			solicitud.setUsuario2((Usuario)SessionHelper.getUsuarioSession(req.getSession(true)));
 			solicitud.setFechaAutorizacion(new Date());
 			solicitudRepo.update(solicitud);
 			result.setRazon("la solicitud ha sido rechazada correctamente");
@@ -125,6 +126,30 @@ public class SolicitudesServlet extends BaseServlet {
 		}
 		solicitudRepo.close();
 		return result;
+	}
+	
+	public Resultado addSolicitud(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= new Resultado(0, "OK");
+		
+		try {
+			Usuario usuarioEnSession= (Usuario)SessionHelper.getUsuarioSession(req.getSession(true));
+			SolicitudesRepository solicitudRepo= new SolicitudesRepository();
+			ItemsRepository itemRepo= new ItemsRepository();
+			SolicitudAsignacion solicitud= new SolicitudAsignacion();
+			AsignacionItem itemSolicitud= itemRepo.get(usuarioEnSession.getDepartamento().getId(), Long.valueOf(req.getParameter("itemId")));
+			solicitud.setUsuario1(usuarioEnSession);
+			solicitud.setFechaSolicitud(new Date());
+			solicitud.setEstado(Status.PENDIENTE);
+			solicitud.setAsignacionItem(itemSolicitud);
+			solicitud.setCantidad(Integer.parseInt(req.getParameter("cantidad")));
+			solicitudRepo.add(solicitud);
+			return result;
+			
+		} catch (Exception e) {
+			logger.error("Error al tratar de agregar una nueva solicitud "+ e.getMessage(), e);
+			result= ErrorHelper.getError(202);
+			return result;
+		}
 	}
 	
 

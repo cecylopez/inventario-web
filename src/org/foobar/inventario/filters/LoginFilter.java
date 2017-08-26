@@ -16,6 +16,8 @@ import org.foobar.inventario.data.Resultado;
 import org.foobar.inventario.servlets.LoginServlet;
 import org.inventario.data.entities.Usuario;
 
+import com.foobar.inventario.util.SessionHelper;
+
 //
 @WebFilter(filterName = "LoginFilter", urlPatterns = { "/site/*", "/sec/*" })
 public class LoginFilter implements Filter {
@@ -29,10 +31,10 @@ public class LoginFilter implements Filter {
 		// la que estamos usando.
 		// getSession(true)porque no queremos que la session regrese null. Con
 		// true puede construir una session al vuelo
-		Object usr = ((HttpServletRequest) req).getSession(true).getAttribute(LoginServlet.USUARIO_SESION);
+		
 		// instanceof revisara que lo que este guardado en usr sea de tipo
 		// usuario
-		if (usr == null || !(usr instanceof Usuario)) {
+		if (SessionHelper.getUsuarioSession(((HttpServletRequest) req).getSession(true))==null) {
 			if (((HttpServletRequest) req).getHeader("Accept").contains("application/json")) {
 				resp.setContentType("application/json");
 				resp.getWriter().write(new Resultado(101, "Usuario no autorizado").toJson().toString());

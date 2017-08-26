@@ -141,9 +141,9 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		
 		},function(){
 		});
-
-
-
 	};
-
+	$scope.showModal=function(mode){
+		$scope.tituloModal="Agregar Solicitud";
+		
+	};
 });
