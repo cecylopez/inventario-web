@@ -68,15 +68,15 @@ public class ItemsServlet extends BaseServlet {
 		items= itemRepo.getAll();
 		for(Item item: items){
 			if (Status.ACTIVO.equals(item.getEstado())) {
-				item.setEstado("Activo");
-			}else if (Status.INACTIVO.equals(item.getEstado())) {
-				item.setEstado("Inactivo");
+				JsonObject jsonObject= new JsonObject();
+				jsonObject.addProperty("id", item.getId());
+				jsonObject.addProperty("nombre", item.getNombre());
+				itemArray.add(jsonObject);
 			}
-			itemObject=item.toJson();
-			
+		}
+		itemObject.add("items", itemArray);
+		result.setContenido(itemObject);
 		return result;
-	}
-	return result;
 	}
 }
 	

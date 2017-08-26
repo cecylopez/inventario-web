@@ -5,7 +5,8 @@ app.controller('solicitudesController', function usersController($scope, $http){
 	$scope.total=0;
 	$scope.pageSize=0;
 	$scope.solicitudes=[];
-
+	$scope.cantidad;
+	$scope.selectedItem={};
 	
 	$scope.getSolicitudes=function(){
 		$scope.loading=true;
@@ -143,7 +144,51 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		});
 	};
 	$scope.showModal=function(mode){
+		$scope.loading=true;
 		$scope.tituloModal="Agregar Solicitud";
-		
+		$scope.items=[];
+		$http({
+			method:'POST',
+			url:'/inventario-web/ItemsServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:"getAllItems"}),
+			responseType:"json"
+		}).then(function(response){
+			$scope.loading=false;
+			$scope.items = response.data.contenido.items;
+			//$('#cmbItems').select2();
+		},function(){
+		});
+		$("#agregarModal").modal("show");
+	};
+	
+	$scope.addSolicitud=function(){
+		var operacion="addSolicitud";
+		$scope.loading=true;
+		$http({
+			method:'POST',
+			url:'/inventario-web/SolicitudesServlet',
+			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+			data:jQuery.param({opt:operacion, cantidad: $scope.cantidad, itemId: $scope.selectedItem.id}),
+			responseType:"json"
+		}).then(function(response){
+			$scope.loading=false;
+			if(response.data.codigo===0){
+				$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success'};
+				$scope.cantidad="";
+				$scope.selectedItem="";
+				$scope.getSolicitudes();
+				$scope.cerrar();
+
+			}else{
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+			}
+			
+		},function(){
+		});
+	};
+	$scope.cerrar=function(){
+		$scope.selectedItem="";
+		$scope.cantidad="";
 	};
 });

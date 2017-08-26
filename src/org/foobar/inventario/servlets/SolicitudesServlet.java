@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.NoResultException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -136,7 +137,22 @@ public class SolicitudesServlet extends BaseServlet {
 			SolicitudesRepository solicitudRepo= new SolicitudesRepository();
 			ItemsRepository itemRepo= new ItemsRepository();
 			SolicitudAsignacion solicitud= new SolicitudAsignacion();
-			AsignacionItem itemSolicitud= itemRepo.get(usuarioEnSession.getDepartamento().getId(), Long.valueOf(req.getParameter("itemId")));
+			AsignacionItem itemSolicitud=null;
+			try {
+				 itemSolicitud= itemRepo.get(usuarioEnSession.getDepartamento().getId(), Long.valueOf(req.getParameter("itemId")));
+
+			} catch (NoResultException nre) {
+				logger.warn("Error al tratar de adquirir un item para el departamento con id " + itemRepo.get(usuarioEnSession.getDepartamento().getId()) + "y item id "+ itemRepo.get(Long.valueOf(req.getParameter("itemId"))) + nre.getMessage(), nre);
+				BaseRepository<AsignacionItem> asignacionRepo= new BaseRepository<>(AsignacionItem.class);
+				itemSolicitud= new AsignacionItem();
+				itemSolicitud.setId(asignacionRepo.getMaxId() + 1);
+				itemSolicitud.setCantidad(0);
+				itemSolicitud.setDepartamento(usuarioEnSession.getDepartamento());
+				itemSolicitud.setItem(itemRepo.getItem(Long.valueOf(req.getParameter("itemId"))));
+				asignacionRepo.add(itemSolicitud);
+			
+			}
+			solicitud.setId(solicitudRepo.getMaxId()+1);
 			solicitud.setUsuario1(usuarioEnSession);
 			solicitud.setFechaSolicitud(new Date());
 			solicitud.setEstado(Status.PENDIENTE);
@@ -152,5 +168,20 @@ public class SolicitudesServlet extends BaseServlet {
 		}
 	}
 	
+	public Resultado modifySolicitud(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= new Resultado(0, "OK");
+		
+		try {
+			SolicitudesRepository solicitudRepo= new SolicitudesRepository();
+			SolicitudAsignacion solicitudAModificar=solicitudRepo.get(Long.valueOf(req.getParameter("SolicitudId")));
+			solicitudAModificar.setCantidad(Integer.parseInt(req.getParameter("cantidad")));
+			solicitudRepo.update(solicitudAModificar);
+			result.setRazon("La solicitud ha sido modificada satisfactoriamente ");
+		} catch (Exception e) {
+			logger.error("Ha surgido un error al modficar una solicitud "+ e.getMessage(), e);
+			result=ErrorHelper.getError(203);
+		}
+		return result;
+	}
 
 }
