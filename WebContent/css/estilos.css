@@ -29,3 +29,6 @@ div#agregarModal input{
 .columnaAcciones{
 	width: 120px;
 }
+table.selecionable tbody tr:hover{
+	cursor: pointer;
+}
