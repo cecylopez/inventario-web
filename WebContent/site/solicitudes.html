@@ -120,7 +120,7 @@
 							<div class="form-group">
 									<label for="itemId">Items</label> <select id="cmbItems" class="form-control"
 										ng-options="i.nombre for i in items track by i.id" ng-model="selectedItem"
-										required="required" ng-disabled="loading">
+										required="required" ng-disabled="editMode">
 									</select>
 								</div>
 							<div class="form-group">

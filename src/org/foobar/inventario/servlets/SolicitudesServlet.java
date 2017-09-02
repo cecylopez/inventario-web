@@ -173,7 +173,7 @@ public class SolicitudesServlet extends BaseServlet {
 		
 		try {
 			SolicitudesRepository solicitudRepo= new SolicitudesRepository();
-			SolicitudAsignacion solicitudAModificar=solicitudRepo.get(Long.valueOf(req.getParameter("SolicitudId")));
+			SolicitudAsignacion solicitudAModificar=solicitudRepo.get(Long.valueOf(req.getParameter("solicitudId")));
 			solicitudAModificar.setCantidad(Integer.parseInt(req.getParameter("cantidad")));
 			solicitudRepo.update(solicitudAModificar);
 			result.setRazon("La solicitud ha sido modificada satisfactoriamente ");

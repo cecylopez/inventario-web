@@ -7,6 +7,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 	$scope.solicitudes=[];
 	$scope.cantidad;
 	$scope.selectedItem={};
+	$scope.editMode=false;
 	
 	$scope.getSolicitudes=function(){
 		$scope.loading=true;
@@ -144,6 +145,8 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		});
 	};
 	$scope.showModal=function(mode){
+		$scope.editMode=(mode=='edit');
+		var item={};
 		$scope.loading=true;
 		$scope.tituloModal="Agregar Solicitud";
 		$scope.items=[];
@@ -156,20 +159,50 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}).then(function(response){
 			$scope.loading=false;
 			$scope.items = response.data.contenido.items;
+			if(mode=='edit'){
+				item=$scope.getSelectedSolicitud()[0];
+				for(var i=0; i<$scope.items.length; i++){
+					if($scope.items[i].id==item.itemId){
+						$scope.selectedItem=$scope.items[i];
+						break;
+					}
+				}
+			}
 			//$('#cmbItems').select2();
 		},function(){
 		});
+		var solicitud=$scope.getSelectedSolicitud()[0];		
+		if(mode=='edit'){
+				$scope.tituloModal="Modificar Solicitud";
+				var arreglo=$scope.getSelectedSolicitud();
+				if(arreglo.length===0){
+					$scope.loading=false;
+					$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una aplicacion", visible:true, clase: 'alert alert-danger'};
+					return;
+				}else{
+					item=arreglo[0];
+					$scope.mensaje={};
+				}
+				$scope.cantidad=item.cantidad;
+			}
+			
 		$("#agregarModal").modal("show");
 	};
 	
 	$scope.addSolicitud=function(){
 		var operacion="addSolicitud";
+		var param=jQuery.param({opt:operacion, cantidad: $scope.cantidad, itemId: $scope.selectedItem.id});
+		if($scope.editMode){
+			var solicitud=$scope.getSelectedSolicitud()[0];
+			operacion="modifySolicitud";
+			param=jQuery.param({opt:operacion, solicitudId: solicitud.id, cantidad: $scope.cantidad});
+		}
 		$scope.loading=true;
 		$http({
 			method:'POST',
 			url:'/inventario-web/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
-			data:jQuery.param({opt:operacion, cantidad: $scope.cantidad, itemId: $scope.selectedItem.id}),
+			data:param,
 			responseType:"json"
 		}).then(function(response){
 			$scope.loading=false;
@@ -187,6 +220,8 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		},function(){
 		});
 	};
+	
+
 	$scope.cerrar=function(){
 		$scope.selectedItem="";
 		$scope.cantidad="";
