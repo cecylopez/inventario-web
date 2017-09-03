@@ -159,7 +159,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}).then(function(response){
 			$scope.loading=false;
 			$scope.items = response.data.contenido.items;
-			if(mode=='edit'){
+			if(mode=='edit' && solicitud.estado=='Pendiente'){
 				item=$scope.getSelectedSolicitud()[0];
 				for(var i=0; i<$scope.items.length; i++){
 					if($scope.items[i].id==item.itemId){
@@ -167,12 +167,16 @@ app.controller('solicitudesController', function usersController($scope, $http){
 						break;
 					}
 				}
+			}else{
+				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una aplicacion con estado pendiente", visible:true, clase: 'alert alert-danger'};
+				$scope.getSolicitudes();
+
 			}
 			//$('#cmbItems').select2();
 		},function(){
 		});
 		var solicitud=$scope.getSelectedSolicitud()[0];		
-		if(mode=='edit'){
+		if(mode=='edit' && solicitud.estado=='Pendiente'){
 				$scope.tituloModal="Modificar Solicitud";
 				var arreglo=$scope.getSelectedSolicitud();
 				if(arreglo.length===0){
@@ -185,7 +189,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 				}
 				$scope.cantidad=item.cantidad;
 			}
-			
+		
 		$("#agregarModal").modal("show");
 	};
 	
