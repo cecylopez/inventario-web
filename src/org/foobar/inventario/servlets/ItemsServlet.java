@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.foobar.inventario.data.Resultado;
 import org.inventario.data.ItemsRepository;
 import org.inventario.data.Status;
@@ -15,6 +16,7 @@ import org.inventario.data.entities.AsignacionItem;
 import org.inventario.data.entities.Item;
 import org.inventario.data.entities.Usuario;
 
+import com.foobar.inventario.util.ErrorHelper;
 import com.foobar.inventario.util.SessionHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -44,12 +46,15 @@ public class ItemsServlet extends BaseServlet {
 			}else if (Status.INACTIVO.equals(item.getEstado())) {
 				item.setEstado("Inactivo");
 			}
-			JsonObject itemJson=item.toJson();
-			itemJson.addProperty("cantidadDepto", item.getAsignacionItems().get(0).getCantidad());
-			logger.debug("Asignacion items:"+Arrays.toString(item.getAsignacionItems().toArray()) );
-			arrayItems.add(itemJson);
+			if(!item.getEstado().equals(Status.ELIMINADO)){
+				JsonObject itemJson=item.toJson();
+				itemJson.addProperty("cantidadDepto", item.getAsignacionItems().get(0).getCantidad());
+				logger.debug("Asignacion items:"+Arrays.toString(item.getAsignacionItems().toArray()) );
+				arrayItems.add(itemJson);	
+			}
+			
 		}
-		total=itemRepo.getTotal();
+		total=itemRepo.getTotal(Long.valueOf(user.getDepartamento().getId()), req.getParameter("nombreItem"));
 		jsonItems.add("items", arrayItems);
 		jsonItems.addProperty("total", total);
 		jsonItems.addProperty("pageSize", PAGE_SIZE_DEFAULT);
@@ -76,6 +81,20 @@ public class ItemsServlet extends BaseServlet {
 		}
 		itemObject.add("items", itemArray);
 		result.setContenido(itemObject);
+		return result;
+	}
+	public Resultado deleteItem(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= new Resultado(0, "OK");
+		ItemsRepository itemRepo= new ItemsRepository();
+		Item item= itemRepo.getItem(Long.valueOf(req.getParameter("idItem")));
+		try {
+			item.setEstado(Status.ELIMINADO);
+			itemRepo.update(item);
+		} catch (Exception e) {
+			logger.error("No se ha podido eliminar el item por la siguiente razon "+ e.getMessage(),e);
+			result=ErrorHelper.getError(300);
+		}
+		itemRepo.close();
 		return result;
 	}
 }

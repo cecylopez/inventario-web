@@ -168,10 +168,12 @@ app.controller('solicitudesController', function usersController($scope, $http){
 					}
 				}
 			}else{
-				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una aplicacion con estado pendiente", visible:true, clase: 'alert alert-danger'};
-				$scope.getSolicitudes();
-
+				$scope.loading=true;
+				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud con estado pendiente", visible:true, clase: 'alert alert-danger'};
 			}
+			$scope.getSolicitudes();
+
+
 			//$('#cmbItems').select2();
 		},function(){
 		});
@@ -191,6 +193,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 			}
 		
 		$("#agregarModal").modal("show");
+		
 	};
 	
 	$scope.addSolicitud=function(){
