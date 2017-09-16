@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -131,16 +132,31 @@ public class SolicitudesServlet extends BaseServlet {
 	
 	public Resultado addSolicitud(HttpServletRequest req, HttpServletResponse resp){
 		Resultado result= new Resultado(0, "OK");
-		
 		try {
 			Usuario usuarioEnSession= (Usuario)SessionHelper.getUsuarioSession(req.getSession(true));
 			SolicitudesRepository solicitudRepo= new SolicitudesRepository();
 			ItemsRepository itemRepo= new ItemsRepository();
 			SolicitudAsignacion solicitud= new SolicitudAsignacion();
+			SolicitudAsignacion solicitudRepetida= new SolicitudAsignacion();
 			AsignacionItem itemSolicitud=null;
+			try{
+				 solicitudRepetida= solicitudRepo.getSolicitudPendiente(usuarioEnSession.getDepartamento().getId(), Long.valueOf(req.getParameter("itemId")));
+				 if(solicitudRepetida!=null){
+					result= ErrorHelper.getError(205);
+					return result;
+ 
+				 }
+					 
+			}catch(NoResultException ne){
+				logger.info("Aun no existe una solicitud para el item con id " + Long.valueOf(req.getParameter("itemId")) + "y departamento con id " + usuarioEnSession.getDepartamento().getId() +" por lo que se procedera a agregar uno");
+			} catch(NonUniqueResultException nur){
+				result= ErrorHelper.getError(205);
+				return result;
+			}
+			
 			try {
 				 itemSolicitud= itemRepo.get(usuarioEnSession.getDepartamento().getId(), Long.valueOf(req.getParameter("itemId")));
-
+			
 			} catch (NoResultException nre) {
 				logger.warn("Error al tratar de adquirir un item para el departamento con id " + itemRepo.get(usuarioEnSession.getDepartamento().getId()) + "y item id "+ itemRepo.get(Long.valueOf(req.getParameter("itemId"))) + nre.getMessage(), nre);
 				BaseRepository<AsignacionItem> asignacionRepo= new BaseRepository<>(AsignacionItem.class);
@@ -183,5 +199,12 @@ public class SolicitudesServlet extends BaseServlet {
 		}
 		return result;
 	}
+	
+/*	public Resultado descartarCantidadItem(HttpServletRequest req, HttpServletResponse resp){
+		Resultado result= new Resultado(0, "OK");
+		ItemsRepository itemRepo
+		
+		return result;
+	}*/
 
 }

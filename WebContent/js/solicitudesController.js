@@ -150,6 +150,27 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		$scope.loading=true;
 		$scope.tituloModal="Agregar Solicitud";
 		$scope.items=[];
+		
+		if($scope.editMode){
+			$scope.tituloModal="Modificar Solicitud";
+			var arreglo=$scope.getSelectedSolicitud();
+			if(arreglo.length===0){
+				$scope.loading=false;
+				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud", visible:true, clase: 'alert alert-danger'};
+				return;
+			}else{
+				item=arreglo[0];
+				$scope.mensaje={};
+			}
+			$scope.cantidad=item.cantidad;
+			
+			if(item.estado!='Pendiente'){
+				$scope.loading=false;
+				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud con estado pendiente", visible:true, clase: 'alert alert-danger'};
+				return;
+			}
+		}
+		
 		$http({
 			method:'POST',
 			url:'/inventario-web/ItemsServlet',
@@ -159,38 +180,21 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}).then(function(response){
 			$scope.loading=false;
 			$scope.items = response.data.contenido.items;
-			if(mode=='edit' && solicitud.estado=='Pendiente'){
-				item=$scope.getSelectedSolicitud()[0];
-				for(var i=0; i<$scope.items.length; i++){
-					if($scope.items[i].id==item.itemId){
-						$scope.selectedItem=$scope.items[i];
-						break;
+			if($scope.editMode){
+				if($scope.editMode){
+					item=$scope.getSelectedSolicitud()[0];
+					for(var i=0; i<$scope.items.length; i++){
+						if($scope.items[i].id==item.itemId){
+							$scope.selectedItem=$scope.items[i];
+							break;
+						}
 					}
 				}
-			}else{
-				$scope.loading=true;
-				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud con estado pendiente", visible:true, clase: 'alert alert-danger'};
 			}
-			$scope.getSolicitudes();
-
 
 			//$('#cmbItems').select2();
 		},function(){
 		});
-		var solicitud=$scope.getSelectedSolicitud()[0];		
-		if(mode=='edit' && solicitud.estado=='Pendiente'){
-				$scope.tituloModal="Modificar Solicitud";
-				var arreglo=$scope.getSelectedSolicitud();
-				if(arreglo.length===0){
-					$scope.loading=false;
-					$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una aplicacion", visible:true, clase: 'alert alert-danger'};
-					return;
-				}else{
-					item=arreglo[0];
-					$scope.mensaje={};
-				}
-				$scope.cantidad=item.cantidad;
-			}
 		
 		$("#agregarModal").modal("show");
 		

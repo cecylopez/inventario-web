@@ -1,104 +1,170 @@
-app.controller('itemsController', function itemsController($scope, $http){
-	$scope.loading=false;
-	$scope.items=[];
-	$scope.currentPage=1;
-	$scope.filter="";
-	$scope.total=0;
-	$scope.pageSize=0;
-	
-	$scope.getItems=function(){
-		$scope.loading=true;
+app.controller('itemsController', function itemsController($scope, $http) {
+	$scope.loading = false;
+	$scope.items = [];
+	$scope.currentPage = 1;
+	$scope.filter = "";
+	$scope.total = 0;
+	$scope.pageSize = 0;
+
+	$scope.getItems = function() {
+		$scope.loading = true;
 		$http({
-			method:'POST',
-			url:'/inventario-web/ItemsServlet',
-			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
-			data:jQuery.param({opt:"getItems", nombreItem:$scope.filter, page:$scope.currentPage}),
-			responseType:"json"
-		}).then(function(response){
-		$scope.loading=false;
-		$scope.items=response.data.contenido.items;
-		$scope.total=response.data.contenido.total;
-		$scope.pageSize=response.data.contenido.pageSize;
-		},function(){
+			method : 'POST',
+			url : '/inventario-web/ItemsServlet',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			data : jQuery.param({
+				opt : "getItems",
+				nombreItem : $scope.filter,
+				page : $scope.currentPage
+			}),
+			responseType : "json"
+		}).then(function(response) {
+			$scope.loading = false;
+			$scope.items = response.data.contenido.items;
+			$scope.total = response.data.contenido.total;
+			$scope.pageSize = response.data.contenido.pageSize;
+		}, function() {
 		});
 	};
 	$scope.getItems();
-	
-	
+
 	$scope.doFilter = function($event) {
-		var keyCode = $event.keyCode; 
-		if (keyCode == 13) { 
+		var keyCode = $event.keyCode;
+		if (keyCode == 13) {
 			$scope.getItems();
 		}
 	};
-	$scope.isNextPage=function(){
-		return ($scope.total/$scope.pageSize)> $scope.currentPage;
+	$scope.isNextPage = function() {
+		return ($scope.total / $scope.pageSize) > $scope.currentPage;
 	};
-	$scope.isPrevPage=function(){
-		return $scope.currentPage>1;
+	$scope.isPrevPage = function() {
+		return $scope.currentPage > 1;
 	};
-	$scope.nextPage=function(){
-		if($scope.isNextPage()){
-			$scope.currentPage+=1;
+	$scope.nextPage = function() {
+		if ($scope.isNextPage()) {
+			$scope.currentPage += 1;
 			$scope.getItems();
 		}
 	};
-	$scope.prevPage=function(){
-		if($scope.isPrevPage()){
-			$scope.currentPage-=1;
+	$scope.prevPage = function() {
+		if ($scope.isPrevPage()) {
+			$scope.currentPage -= 1;
 			$scope.getItems();
 		}
 	};
-	$scope.getItemColor=function(item){
-		if(item.cantidadDepto <= item.cantidadMinima){
+	$scope.getItemColor = function(item) {
+		if (item.cantidadDepto <= item.cantidadMinima) {
 			return "item-insuficiente";
-		}else{
+		} else {
 			return "";
 		}
 	};
-	
-	 $scope.selectItem=function(item){
-			$scope.getSelectedItem().forEach(function(i) {
-				i.selected=false;
-			});
-			
-			item.selected=true;
-			
-	};
-	$scope.getSelectedItem=function(){
-		return $scope.items.filter(i => i.selected);
-	};
-	$scope.deleteItem=function(){
-		if(!confirm("Esta seguro de que quiere borrar este item?")){
+
+	/*
+	 * $scope.selectItem=function(item){
+	 * $scope.getSelectedItem().forEach(function(i) { i.selected=false; });
+	 * 
+	 * item.selected=true;
+	 *  };
+	 */
+	/*
+	 * $scope.getSelectedItem=function(){ return $scope.items.filter(i =>
+	 * i.selected); };
+	 */
+	$scope.deleteItem = function() {
+		if (!confirm("Esta seguro de que quiere borrar este item?")) {
 			return;
 		}
-		$scope.loading=true;
-		var idItem=0;
-		var arreglo=$scope.getSelectedItem();
-		if(arreglo.length===0){
-			$scope.loading=false;
-			$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar un item ", visible:true, clase: 'alert alert-danger'};
+		$scope.loading = true;
+		var idItem = 0;
+		var arreglo = $scope.getSelectedItem();
+		if (arreglo.length === 0) {
+			$scope.loading = false;
+			$scope.mensaje = {
+				titulo : 'Error',
+				mensaje : "debe seleccionar un item ",
+				visible : true,
+				clase : 'alert alert-danger'
+			};
 			return;
-		}else{
-			idItem=arreglo[0].id;
-			$scope.mensaje={};
+		} else {
+			idItem = arreglo[0].id;
+			$scope.mensaje = {};
+		}
+		$http({
+			method : 'POST',
+			url : '/inventario-web/ItemsServlet',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			data : jQuery.param({
+				opt : "deleteItem",
+				idItem : idItem
+			}),
+			responseType : "json"
+		}).then(function(response) {
+			$scope.loading = false;
+			if (response.data.codigo === 0) {
+				$scope.mensaje = {
+					titulo : 'OK',
+					mensaje : 'Item eleminado satisfactoriamente',
+					visible : true,
+					clase : 'alert alert-success'
+				};
+				$scope.getItems();
+			} else {
+				$scope.mensaje = {
+					titulo : 'Error',
+					mensaje : response.data.razon,
+					visible : true,
+					clase : 'alert alert-danger'
+				};
+			}
+
+		}, function() {
+		});
+	};
+	$scope.showSolicitudModal = function(mode, item) {
+		$scope.solicitudMode = (mode == 's');
+		$scope.tituloModal = "Solicitar Item";
+		$scope.itemSolicitado=item;
+		if (!$scope.solicitudMode) {
+			$scope.tituloModal = "Descartar cantidad de Item";
+		}
+		$("#solicitarModal").modal("show");
+	};
+	
+	$scope.aplicarSolicitud=function(){
+		var operacion="addSolicitud";
+		if(!$scope.solicitudMode){
+		operacion="descartarCantidadItem";
 		}
 		$http({
 			method:'POST',
-			url:'/inventario-web/ItemsServlet',
+			url:'/inventario-web/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
-			data:jQuery.param({opt:"deleteItem", idItem: idItem}),
+			data:jQuery.param({opt: operacion, itemId:$scope.itemSolicitado.id, cantidad:$scope.cantidad}),
 			responseType:"json"
 		}).then(function(response){
-		$scope.loading=false;
-		if(response.data.codigo===0){
-			$scope.mensaje={titulo:'OK', mensaje:'Item eleminado satisfactoriamente', visible:true, clase: 'alert alert-success'};
-			$scope.getItems();
-		}else{
-			$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
-		}
-		
+			$scope.loading=false;
+			if(response.data.codigo===0){
+				$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success'};
+				$scope.cantidad="";
+				$scope.selectedItem="";
+				$scope.getSolicitudes();
+				$scope.cerrar();
+
+			}else{
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+			}
+			
 		},function(){
-		});	
+		});
+		
 	};
+	
+	
+
 });

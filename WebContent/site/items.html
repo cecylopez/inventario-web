@@ -31,7 +31,7 @@
 					<input type="search" id="filtro" class="form-control"
 						placeholder="filtrar items" ng-model="filter"
 						ng-keyup="doFilter($event)">
-					<table class="table table-bordered table-hover table-condensed selecionable">
+					<table class="table table-bordered table-hover table-condensed">
 						<thead>
 							<tr>
 								<th>ID</th>
@@ -44,36 +44,75 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="i in items">
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.id}}</td>
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.nombre}}</td>
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.estado}}</td>
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)">{{i.categoria}}</td>
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)"><span ng-class="getItemColor(i)">{{i.cantidadDepto}}</span></td>
-								<td ng-class="{'info': i.selected}" ng-click="selectItem(i)"></td>
+								<td>{{i.id}}</td>
+								<td>{{i.nombre}}</td>
+								<td>{{i.estado}}</td>
+								<td>{{i.categoria}}</td>
+								<td>{{i.cantidadDepto}}</span></td>
+								<td><div class="columnaAcciones">
+										<a href="javascript:void(0)"
+											ng-click="showSolicitudModal('s',i)">solicitar</a> | <a
+											href="javascript:void(0)"
+											ng-click="showSolicitudModal('d', i)">descartar</a>
+									</div></td>
 							</tr>
 						</tbody>
 					</table>
 					<nav aria-label="...">
 						<ul class="pager">
-							<li class="previous " ng-click="prevPage()" ng-class="{'disabled': !isPrevPage()}"><a href="#"><span
+							<li class="previous " ng-click="prevPage()"
+								ng-class="{'disabled': !isPrevPage()}"><a href="#"><span
 									aria-hidden="true">&larr;</span> Anterior</a></li>
-							<li>Página
-								{{currentPage}}</li>
-							<li class="next" ng-click="nextPage()" ng-class="{'disabled': !isNextPage()}"><a href="#">Siguiente <span
-									aria-hidden="true">&rarr;</span></a></li>
+							<li>Página {{currentPage}}</li>
+							<li class="next" ng-click="nextPage()"
+								ng-class="{'disabled': !isNextPage()}"><a href="#">Siguiente
+									<span aria-hidden="true">&rarr;</span>
+							</a></li>
 						</ul>
 					</nav>
 				</div>
 
 
 				<div class="panel-footer">
-				<button type="button" class="btn btn-default" ng-disabled="loading">Agregar</button>
-				<button type="button" class="btn btn-default" ng-disabled="loading">Modificar</button>
-				<button type="button" class="btn btn-default" ng-disabled="loading" ng-click="deleteItem()">Eliminar</button>
-
-				
 					<img src="../img/2.gif" height="25" ng-show="loading">
 
+				</div>
+			</div>
+
+			<div class="modal fade" id="solicitarModal" role="dialog"
+				aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<form id="accionesSolicitud" name="accionesSolicitud" role="form"
+						ng-submit="aplicarSolicitud()">
+						<div class="modal-content">
+							<div class="modal-header">
+
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel">{{tituloModal}}</h4>
+							</div>
+							<div class="modal-body">
+								<div ng-class="mensaje.clase" role="alert"
+									ng-show="mensaje.visible">
+									<strong>{{mensaje.titulo}}</strong> {{mensaje.mensaje}}
+								</div>
+								<div class="form-group">
+									<label for="cantidad">Cantidad</label> <input type="number"
+										min="1" max="10000" class="form-control" id="cantidad"
+										placeholder="Ingrese cantidad" required="required"
+										ng-model="cantidad" ng-disabled="loading">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal" ng-click="cerrar()" ng-disabled="loading">Cancelar</button>
+								<button type="submit" class="btn btn-primary"
+									ng-disabled="loading">Guardar</button>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
