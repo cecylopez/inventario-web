@@ -236,5 +236,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 	$scope.cerrar=function(){
 		$scope.selectedItem="";
 		$scope.cantidad="";
+		$("#agregarModal").modal("hide");
+
 	};
 });

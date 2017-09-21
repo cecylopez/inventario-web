@@ -136,10 +136,18 @@ app.controller('itemsController', function itemsController($scope, $http) {
 		$("#solicitarModal").modal("show");
 	};
 	
+	$scope.cerrar=function(){
+		$scope.cantidad="";
+		$("#solicitarModal").modal("hide");
+
+	};
+	
 	$scope.aplicarSolicitud=function(){
 		var operacion="addSolicitud";
+		$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success'};
 		if(!$scope.solicitudMode){
 		operacion="descartarCantidadItem";
+		$scope.mensaje={titulo:'OK', mensaje:'Items descartados satisfactoriamente', visible:true, clase: 'alert alert-success'};
 		}
 		$http({
 			method:'POST',
@@ -150,10 +158,10 @@ app.controller('itemsController', function itemsController($scope, $http) {
 		}).then(function(response){
 			$scope.loading=false;
 			if(response.data.codigo===0){
-				$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success'};
+				$scope.mensaje;
 				$scope.cantidad="";
 				$scope.selectedItem="";
-				$scope.getSolicitudes();
+				$scope.getItems();
 				$scope.cerrar();
 
 			}else{
@@ -164,6 +172,8 @@ app.controller('itemsController', function itemsController($scope, $http) {
 		});
 		
 	};
+	
+	
 	
 	
 

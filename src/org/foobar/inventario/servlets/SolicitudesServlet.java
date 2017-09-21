@@ -24,6 +24,7 @@ import org.inventario.data.Status;
 import org.inventario.data.UsersRepository;
 import org.inventario.data.entities.AsignacionItem;
 import org.inventario.data.entities.Departamento;
+import org.inventario.data.entities.Item;
 import org.inventario.data.entities.SolicitudAsignacion;
 import org.inventario.data.entities.Usuario;
 
@@ -200,11 +201,21 @@ public class SolicitudesServlet extends BaseServlet {
 		return result;
 	}
 	
-/*	public Resultado descartarCantidadItem(HttpServletRequest req, HttpServletResponse resp){
+	public Resultado descartarCantidadItem(HttpServletRequest req, HttpServletResponse resp){
 		Resultado result= new Resultado(0, "OK");
-		ItemsRepository itemRepo
+		ItemsRepository itemRepo= new ItemsRepository();
+		Usuario usuarioEnSession= (Usuario)SessionHelper.getUsuarioSession(req.getSession(true));
+		try {
+			AsignacionItem asignacionItem= itemRepo.get(usuarioEnSession.getDepartamento().getId(), Long.valueOf(req.getParameter("itemId")));
+			asignacionItem.setCantidad(asignacionItem.getCantidad() - Integer.parseInt(req.getParameter("cantidad")));
+			itemRepo.update(asignacionItem);
+			result.setRazon("La cantidad ha sido actualizada satisfactoriamente");
+		} catch (Exception e) {
+			logger.error("Ha ocurrido un error al tratar de descartar un elemento "+ e.getMessage(), e);
+			result=ErrorHelper.getError(301);
+		}
 		
 		return result;
-	}*/
-
+	
+	}
 }
