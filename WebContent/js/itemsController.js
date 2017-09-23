@@ -62,70 +62,6 @@ app.controller('itemsController', function itemsController($scope, $http) {
 		}
 	};
 
-	/*
-	 * $scope.selectItem=function(item){
-	 * $scope.getSelectedItem().forEach(function(i) { i.selected=false; });
-	 * 
-	 * item.selected=true;
-	 *  };
-	 */
-	/*
-	 * $scope.getSelectedItem=function(){ return $scope.items.filter(i =>
-	 * i.selected); };
-	 */
-	$scope.deleteItem = function() {
-		if (!confirm("Esta seguro de que quiere borrar este item?")) {
-			return;
-		}
-		$scope.loading = true;
-		var idItem = 0;
-		var arreglo = $scope.getSelectedItem();
-		if (arreglo.length === 0) {
-			$scope.loading = false;
-			$scope.mensaje = {
-				titulo : 'Error',
-				mensaje : "debe seleccionar un item ",
-				visible : true,
-				clase : 'alert alert-danger'
-			};
-			return;
-		} else {
-			idItem = arreglo[0].id;
-			$scope.mensaje = {};
-		}
-		$http({
-			method : 'POST',
-			url : '/inventario-web/ItemsServlet',
-			headers : {
-				'Content-Type' : 'application/x-www-form-urlencoded'
-			},
-			data : jQuery.param({
-				opt : "deleteItem",
-				idItem : idItem
-			}),
-			responseType : "json"
-		}).then(function(response) {
-			$scope.loading = false;
-			if (response.data.codigo === 0) {
-				$scope.mensaje = {
-					titulo : 'OK',
-					mensaje : 'Item eleminado satisfactoriamente',
-					visible : true,
-					clase : 'alert alert-success'
-				};
-				$scope.getItems();
-			} else {
-				$scope.mensaje = {
-					titulo : 'Error',
-					mensaje : response.data.razon,
-					visible : true,
-					clase : 'alert alert-danger'
-				};
-			}
-
-		}, function() {
-		});
-	};
 	$scope.showSolicitudModal = function(mode, item) {
 		$scope.solicitudMode = (mode == 's');
 		$scope.tituloModal = "Solicitar Item";
@@ -159,8 +95,6 @@ app.controller('itemsController', function itemsController($scope, $http) {
 			$scope.loading=false;
 			if(response.data.codigo===0){
 				$scope.mensaje;
-				$scope.cantidad="";
-				$scope.selectedItem="";
 				$scope.getItems();
 				$scope.cerrar();
 
