@@ -1,1 +1,1 @@
- web: sh startServer-heroku.sh
+web:    java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
