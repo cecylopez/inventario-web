@@ -21,6 +21,7 @@ import org.inventario.data.entities.Usuario;
 import org.inventario.util.SecurityHelper;
 
 import com.foobar.inventario.util.ErrorHelper;
+import com.foobar.inventario.util.ResourceManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -169,7 +170,7 @@ public class UsuariosServlet extends BaseServlet {
 		String menuJson= "";
 		String strLinea=null;
 		
-		try (InputStream s = UsuariosServlet.class.getResourceAsStream("/org/foobar/inventario/properties/menu.json");
+		try (InputStream s = ResourceManager.getResource("menu.json");
 				InputStreamReader isr = new InputStreamReader(s);
 				BufferedReader br= new BufferedReader(isr)) {
 			strLinea=br.readLine();

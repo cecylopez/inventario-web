@@ -1,6 +1,5 @@
 package com.foobar.inventario.util;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -12,7 +11,7 @@ public class ErrorHelper {
 		Properties props= new Properties();
 		Resultado res;
 		try {
-			props.load(ErrorHelper.class.getResourceAsStream("/org/foobar/inventario/properties/errorCodes.properties"));
+			props.load(ResourceManager.getResource("errorCodes.properties"));
 			res= new Resultado(codigo, props.getProperty(String.valueOf(codigo), "Error desconocido"));
 
 		} catch (Exception e) {
