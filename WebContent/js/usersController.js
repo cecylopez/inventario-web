@@ -16,7 +16,7 @@ app.controller('usersController', function usersController($scope, $http){
 		$scope.departamentos=[];
 		$http({
 			method:'POST',
-			url:'/inventario-web/UsuariosServlet',
+			url:'/UsuariosServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"getRoles"}),
 			responseType:"json"
@@ -35,7 +35,7 @@ app.controller('usersController', function usersController($scope, $http){
 		});
 		$http({
 			method:'POST',
-			url:'/inventario-web/UsuariosServlet',
+			url:'/UsuariosServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"getDepartamentos"}),
 			responseType:"json"
@@ -75,7 +75,7 @@ app.controller('usersController', function usersController($scope, $http){
 		$scope.loading=true;
 		$http({
 			method:'POST',
-			url:'/inventario-web/UsuariosServlet',
+			url:'/UsuariosServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"getUsers"}),
 			responseType:"json"
@@ -96,7 +96,7 @@ app.controller('usersController', function usersController($scope, $http){
 		$scope.loading=true;
 		$http({
 			method:'POST',
-			url:'/inventario-web/UsuariosServlet',
+			url:'/UsuariosServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:param,
 			responseType:"json"
@@ -147,7 +147,7 @@ app.controller('usersController', function usersController($scope, $http){
 		}
 		$http({
 			method:'POST',
-			url:'/inventario-web/UsuariosServlet',
+			url:'/UsuariosServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"deleteUsuario", userId: userId}),
 			responseType:"json"

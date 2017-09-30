@@ -7,7 +7,7 @@ app.controller('loginController', function loginController($scope, $http){
 		$scope.loading = true;
 		$http({
 			method:'POST',
-			url:'/inventario-web/LoginServlet',
+			url:'/LoginServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"cambiarClave", claveActual: $scope.claveActual, nuevaClave: $scope.nuevaClave, repetirNuevaClave: $scope.repetirNuevaClave}),
 			responseType:"json"
@@ -32,7 +32,7 @@ app.controller('loginController', function loginController($scope, $http){
 	$scope.getUser=function(){
 		$http({
 			method:'POST',
-			url:'/inventario-web/LoginServlet',
+			url:'/LoginServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"getUser"}),
 			responseType:"json"
@@ -45,7 +45,7 @@ app.controller('loginController', function loginController($scope, $http){
 				$scope.getMenu();
 				
 			}else if(response.data.codigo===0){
-					window.location.href='inventario-web/login.html'
+					window.location.href='/login.html'
 			}else{
 					$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
 			}
@@ -59,12 +59,12 @@ app.controller('loginController', function loginController($scope, $http){
 	$scope.logOut=function(){
 		$http({
 			method:'POST',
-			url: '/inventario-web/LoginServlet',
+			url: '/LoginServlet',
 		    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"logOut"}),
 			responseType:"json"
 		}).then(function(response){
-			window.location.href='inventario-web/login.html';
+			window.location.href='/login.html';
 		}, function(){
 			
 		});
@@ -73,13 +73,13 @@ app.controller('loginController', function loginController($scope, $http){
 		$scope.loading=true;
 		$http({
 			method:'POST',
-			url: '/inventario-web/LoginServlet',
+			url: '/LoginServlet',
 		    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"logIn",usuario: $scope.usr.nombre, clave: $scope.usr.clave}),
 			responseType:"json"
 		}).then(function(response){ 
 			if(response.data.codigo===0){
-				window.location.href='/inventario-web/site/index.html';
+				window.location.href='/site/index.html';
 			}else{
 				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
 			}
@@ -93,7 +93,7 @@ app.controller('loginController', function loginController($scope, $http){
 	$scope.getMenu=function(){
 		$http({
 			method:'POST',
-			url:'/inventario-web/UsuariosServlet',
+			url:'/UsuariosServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"getMenu"}),
 			responseType:"json"

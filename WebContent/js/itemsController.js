@@ -10,7 +10,7 @@ app.controller('itemsController', function itemsController($scope, $http) {
 		$scope.loading = true;
 		$http({
 			method : 'POST',
-			url : '/inventario-web/ItemsServlet',
+			url : '/ItemsServlet',
 			headers : {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			},
@@ -87,7 +87,7 @@ app.controller('itemsController', function itemsController($scope, $http) {
 		}
 		$http({
 			method:'POST',
-			url:'/inventario-web/SolicitudesServlet',
+			url:'/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt: operacion, itemId:$scope.itemSolicitado.id, cantidad:$scope.cantidad}),
 			responseType:"json"

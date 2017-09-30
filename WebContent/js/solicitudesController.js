@@ -13,7 +13,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		$scope.loading=true;
 		$http({
 			method:'POST',
-			url:'/inventario-web/SolicitudesServlet',
+			url:'/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"getSolicitudes", nombreItem:$scope.filter, page:$scope.currentPage}),
 			responseType:"json"
@@ -71,7 +71,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		$scope.loading=true;
 		$http({
 			method:'POST',
-			url:'/inventario-web/SolicitudesServlet',
+			url:'/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"rechazarSolicitud", idSolicitud: solicitud.id}),
 			responseType:"json"
@@ -94,7 +94,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		$scope.loading=true;
 		$http({
 			method:'POST',
-			url:'/inventario-web/SolicitudesServlet',
+			url:'/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"aprobarSolicitud", idSolicitud: solicitud.id}),
 			responseType:"json"
@@ -128,7 +128,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}
 		$http({
 			method:'POST',
-			url:'/inventario-web/SolicitudesServlet',
+			url:'/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"deleteSolicitud", idSolicitud: idSolicitud}),
 			responseType:"json"
@@ -173,7 +173,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		
 		$http({
 			method:'POST',
-			url:'/inventario-web/ItemsServlet',
+			url:'/ItemsServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:jQuery.param({opt:"getAllItems"}),
 			responseType:"json"
@@ -211,7 +211,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		$scope.loading=true;
 		$http({
 			method:'POST',
-			url:'/inventario-web/SolicitudesServlet',
+			url:'/SolicitudesServlet',
 			headers:{'Content-Type': 'application/x-www-form-urlencoded'},
 			data:param,
 			responseType:"json"
