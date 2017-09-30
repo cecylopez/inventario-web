@@ -39,7 +39,7 @@ public class LoginFilter implements Filter {
 				resp.setContentType("application/json");
 				resp.getWriter().write(new Resultado(101, "Usuario no autorizado").toJson().toString());
 			} else {
-				((HttpServletResponse) resp).sendRedirect("/inventario-web/login.html");
+				((HttpServletResponse) resp).sendRedirect("/login.html");
 			}
 
 		} else {
