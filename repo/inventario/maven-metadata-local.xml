@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>foobar</groupId>
+  <artifactId>inventario</artifactId>
+  <versioning>
+    <release>1.0.0-RELEASE</release>
+    <versions>
+      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.0-RELEASE</version>
+    </versions>
+    <lastUpdated>20170930041326</lastUpdated>
+  </versioning>
+</metadata>
