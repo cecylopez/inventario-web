@@ -11,7 +11,7 @@ public class ErrorHelper {
 		Properties props= new Properties();
 		Resultado res;
 		try {
-			props.load(ResourceManager.getResource("/errorCodes.properties"));
+			props.load(ResourceManager.getResource("errorCodes.properties"));
 			res= new Resultado(codigo, props.getProperty(String.valueOf(codigo), "Error desconocido"));
 
 		} catch (Exception e) {
