@@ -9,6 +9,8 @@
 	<packaging>war</packaging>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		<!-- https://maven.apache.org/plugins/maven-resources-plugin/examples/include-exclude.html
+		coloque esta parte para que se pueda definir la ruta   -->
 		<resources>
 			<resource>
 				<directory>src</directory>
