@@ -1,6 +1,6 @@
 {"menu": [
 		{"nombre": "Administración de Usuarios",
-			"url": "/inventario-web/site/usuarios.html",
+			"url": "/site/usuarios.html",
 			"roles": ["admin"],
 			"acciones": [
 				{"accion": "agregar", "roles": ["admin"]},
@@ -9,17 +9,17 @@
 			]
 		},
 		{"nombre": "Administración de Ítems",
-			"url": "/inventario-web/site/items.html",
+			"url": "/site/items.html",
 			"roles": ["admin", "AdminDepto"],
 			"acciones": []
 		},
 		{"nombre": "Solicitudes de Asignación",
-			"url": "/inventario-web/site/solicitudes.html",
+			"url": "/site/solicitudes.html",
 			"roles": ["admin","AdminDepto"],
 			"acciones": []
 		},
 		{"nombre": "Cambiar Contraseña",
-			"url": "/inventario-web/site/cambioContrasena.html",
+			"url": "/site/cambioContrasena.html",
 			"roles": ["admin", "Base", "Consulta", "Reportes", "Procesos", "Autoriza", "AdminDepto","Vendedor"],
 			"acciones": []
 		}
