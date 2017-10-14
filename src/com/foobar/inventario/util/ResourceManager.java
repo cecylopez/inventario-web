@@ -23,7 +23,7 @@ public class ResourceManager {
 		System.out.println("testStream6: "+ ResourceManager.class.getResourceAsStream("/inventario-web-0.0.1-SNAPSHOT/WEB-INF/classes/com/foobar/inventario/util/" + RECURSO) );
 		System.out.println("testStream7: "+ ResourceManager.class.getResourceAsStream("/target/inventario-web-0.0.1-SNAPSHOT/WEB-INF/classes/com/foobar/inventario/util/" + RECURSO) );
 
-		return new FileInputStream(resourceURL.getPath());
+		return ResourceManager.class.getResourceAsStream(resourceName);
 	}
 	
 	
