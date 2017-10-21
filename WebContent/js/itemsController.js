@@ -80,10 +80,10 @@ app.controller('itemsController', function itemsController($scope, $http) {
 	
 	$scope.aplicarSolicitud=function(){
 		var operacion="addSolicitud";
-		$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success'};
+		$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success alert-dismissible'};
 		if(!$scope.solicitudMode){
 		operacion="descartarCantidadItem";
-		$scope.mensaje={titulo:'OK', mensaje:'Items descartados satisfactoriamente', visible:true, clase: 'alert alert-success'};
+		$scope.mensaje={titulo:'OK', mensaje:'Items descartados satisfactoriamente', visible:true, clase: 'alert alert-success alert-dismissible'};
 		}
 		$http({
 			method:'POST',
@@ -94,21 +94,16 @@ app.controller('itemsController', function itemsController($scope, $http) {
 		}).then(function(response){
 			$scope.loading=false;
 			if(response.data.codigo===0){
-				$scope.mensaje;
 				$scope.getItems();
 				$scope.cerrar();
 
 			}else{
-				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger alert-dismissible'};
 			}
 			
 		},function(){
 		});
 		
-	};
-	
-	
-	
-	
+	};	
 
 });

@@ -78,11 +78,11 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}).then(function(response){
 			if(response.data.codigo===0){
 				$scope.loading=false;
-				$scope.mensaje={titulo:'OK', mensaje:response.data.razon, visible:true, clase: 'alert alert-success'};
+				$scope.mensaje={titulo:'OK', mensaje:response.data.razon, visible:true, clase: 'alert alert-success alert-dismissible'};
 				$scope.getSolicitudes();
 			}else{
 				$scope.loading=false;
-				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger alert-dismissible'};
 				$scope.getSolicitudes();
 			}
 
@@ -101,11 +101,11 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}).then(function(response){
 			if(response.data.codigo===0){
 				$scope.loading=false;
-				$scope.mensaje={titulo:'OK', mensaje:response.data.razon, visible:true, clase: 'alert alert-success'};
+				$scope.mensaje={titulo:'OK', mensaje:response.data.razon, visible:true, clase: 'alert alert-success alert-dismissible'};
 				$scope.getSolicitudes();
 			}else{
 				$scope.loading=false;
-				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger alert-dismissible'};
 				$scope.getSolicitudes();
 			}
 		},function(){});	
@@ -120,7 +120,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		var arreglo=$scope.getSelectedSolicitud();
 		if(arreglo.length===0){
 			$scope.loading=false;
-			$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud ", visible:true, clase: 'alert alert-danger'};
+			$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud ", visible:true, clase: 'alert alert-danger alert-dismissible'};
 			return;
 		}else{
 			idSolicitud=arreglo[0].id;
@@ -135,10 +135,10 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}).then(function(response){
 		$scope.loading=false;
 		if(response.data.codigo===0){
-			$scope.mensaje={titulo:'OK', mensaje:'Solicitud eleminada satisfactoriamente', visible:true, clase: 'alert alert-success'};
+			$scope.mensaje={titulo:'OK', mensaje:'Solicitud eleminada satisfactoriamente', visible:true, clase: 'alert alert-success alert-dismissible'};
 			$scope.getSolicitudes();
 		}else{
-			$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+			$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger alert-dismissible'};
 		}
 		
 		},function(){
@@ -156,7 +156,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 			var arreglo=$scope.getSelectedSolicitud();
 			if(arreglo.length===0){
 				$scope.loading=false;
-				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud", visible:true, clase: 'alert alert-danger'};
+				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud", visible:true, clase: 'alert alert-danger alert-dismissible'};
 				return;
 			}else{
 				item=arreglo[0];
@@ -166,7 +166,7 @@ app.controller('solicitudesController', function usersController($scope, $http){
 			
 			if(item.estado!='Pendiente'){
 				$scope.loading=false;
-				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud con estado pendiente", visible:true, clase: 'alert alert-danger'};
+				$scope.mensaje={titulo:'Error', mensaje:"debe seleccionar una solicitud con estado pendiente", visible:true, clase: 'alert alert-danger alert-dismissible'};
 				return;
 			}
 		}
@@ -218,14 +218,14 @@ app.controller('solicitudesController', function usersController($scope, $http){
 		}).then(function(response){
 			$scope.loading=false;
 			if(response.data.codigo===0){
-				$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success'};
+				$scope.mensaje={titulo:'OK', mensaje:'Solicitud agregada satisfactoriamente', visible:true, clase: 'alert alert-success alert-dismissible'};
 				$scope.cantidad="";
 				$scope.selectedItem="";
 				$scope.getSolicitudes();
 				$scope.cerrar();
 
 			}else{
-				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger'};
+				$scope.mensaje={titulo:'Error', mensaje:response.data.razon, visible:true, clase: 'alert alert-danger alert-dismissible'};
 			}
 			
 		},function(){

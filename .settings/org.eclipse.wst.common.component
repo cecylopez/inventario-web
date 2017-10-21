@@ -4,6 +4,7 @@
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/tests"/>
         <dependent-module archiveName="inventario-1.0.0-RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/inventario/inventario">
             <dependency-type>uses</dependency-type>
         </dependent-module>
